@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package video.game;
+package videogame;
 
 import java.awt.image.BufferedImage;
-import video.game.ImageLoader;
+import videogame.ImageLoader;
 
 /**
  *

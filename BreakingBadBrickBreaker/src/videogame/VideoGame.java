@@ -1,4 +1,4 @@
-package video.game;
+package videogame;
 
 /**
  *
