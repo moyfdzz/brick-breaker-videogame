@@ -121,12 +121,8 @@ public class Player extends Item {
      * @param obj
      * @return Rectangle
      */
-<<<<<<< HEAD
-    public boolean intersecta(Enemy obj) {
-=======
     public boolean intersecta(Brick obj) {
 
->>>>>>> df7ca5e626808e562c49f4399c31432ff6dfec8a
         return getPerimetro().intersects(obj.getPerimetro());
     }
     
@@ -145,11 +141,6 @@ public class Player extends Item {
         if (game.getKeyManager().SPACE) { // moves down + left
         }
 
-<<<<<<< HEAD
-        // Collision between the player and the window
-        if (getX() + getWidth() >= game.getWidth()) {
-            setX(game.getWidth() - getWidth());
-=======
 
 
         
@@ -177,7 +168,6 @@ public class Player extends Item {
         //right side of the window
         if (getX() + 100 >= game.getWidth()) {
             setX(game.getWidth() - 100);
->>>>>>> df7ca5e626808e562c49f4399c31432ff6dfec8a
         }
         else if (getX() <= 0) {
             setX(0);
