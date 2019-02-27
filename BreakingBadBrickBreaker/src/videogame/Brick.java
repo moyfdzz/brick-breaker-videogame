@@ -20,7 +20,7 @@ public class Brick extends Item {
     private int lives;
     
     /**
-     * Constructor to initialize an object of the type Enemy with its attributes
+     * Constructor to initialize an object of the type Brick with its attributes
      * @param x
      * @param y
      * @param width
@@ -89,7 +89,6 @@ public class Brick extends Item {
      * @return Rectangle
      */
     public Rectangle getPerimetro() {
-
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
     /**
@@ -98,18 +97,7 @@ public class Brick extends Item {
      * @return Rectangle
      */
     public boolean intersecta(Player obj) {
-
         return getPerimetro().intersects(obj.getPerimetro());
-    }
-    
-    /**
-     * The enemy appears with a higher velocity and in another random position
-     */
-    public void reappear() {
-        int randomX = (int) (Math.random() * ((game.getWidth()) + 1));
-        setX(randomX);
-        int randomY = (int)(Math.random() * (-100));
-        setY(randomY);
     }
     
     @Override
