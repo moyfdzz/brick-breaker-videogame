@@ -17,6 +17,7 @@ public class Brick extends Item {
     private int width;
     private int height;
     private Game game;
+    private int lives;
     
     /**
      * Constructor to initialize an object of the type Enemy with its attributes
@@ -26,14 +27,28 @@ public class Brick extends Item {
      * @param height
      * @param game
      */
-    public Brick(int x, int y, int width, int height, Game game, int randomDirection) {
+    public Brick(int x, int y, int width, int height, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
         this.game = game;      
-        this.velocity = (int) ((Math.random() * (3)) + 3);
-        this.colliding = false;
-        this.randomDirection = randomDirection;
+        this.lives = 3;
+    }
+
+    public Game getGame() {
+        return this.game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
     
     /**
@@ -52,17 +67,6 @@ public class Brick extends Item {
         return height;
     }
 
-    /**
-     * To get the velocity of the enemy
-     * @return 
-     */
-    public int getVelocity() {
-        return velocity;
-    }
-
-    public boolean isColliding() {
-        return colliding;
-    }
     
     /**
      * To set the width of the window of the game
@@ -78,22 +82,6 @@ public class Brick extends Item {
      */
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    /**
-     * To set the velocity of the enemy
-     * @param velocity 
-     */
-    public void setVelocity(int velocity) {
-        this.velocity = velocity;
-    }
-
-    public void setColliding(boolean colliding) {
-        this.colliding = colliding;
-    }
-
-    public int getRandomDirection() {
-        return randomDirection;
     }
     
     /**
@@ -126,29 +114,6 @@ public class Brick extends Item {
     
     @Override
     public void tick() {    
-        if (getRandomDirection() == 1) {
-            setX(getX() - getVelocity());
-            setY(getY() + getVelocity());
-        }
-        else {
-            setX(getX() + getVelocity());
-            setY(getY() + getVelocity());
-        }
-
-        // reset x position and y position if collision
-        if (getX() >= game.getWidth()) {
-            setColliding(true);
-        } else if (getX() <= 0) {
-            setColliding(true);
-        }
-        else if (getY() >= game.getHeight()) {
-            setColliding(true);
-        }
-        
-        //bot side of the window
-        if (getY() + 90 >= game.getHeight()) {
-            setColliding(true);
-        }
 
     }
     
@@ -158,6 +123,8 @@ public class Brick extends Item {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.enemy, getX(), getY(), getWidth(), getHeight(), null);
+
+        g.drawImage(Assets.brickSkins[getLives()-1] , getX(), getY(), getWidth(), getHeight(), null);
+
     }
 }

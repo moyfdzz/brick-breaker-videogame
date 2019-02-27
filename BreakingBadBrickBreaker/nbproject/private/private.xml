@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/moisesfernandez/Desktop/Github/University-Assignments/Java%20Videogames/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/SpreadSheet.java</file>
-            <file>file:/Users/moisesfernandez/Desktop/Github/University-Assignments/Java%20Videogames/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/Player.java</file>
-            <file>file:/Users/moisesfernandez/Desktop/Github/University-Assignments/Java%20Videogames/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/Assets.java</file>
-            <file>file:/Users/moisesfernandez/Desktop/Github/University-Assignments/Java%20Videogames/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/Game.java</file>
+            <file>file:/Users/ErickFrank/Github/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/Game.java</file>
+            <file>file:/Users/ErickFrank/Github/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/Ball.java</file>
+            <file>file:/Users/ErickFrank/Github/brick-breaker-videogame/BreakingBadBrickBreaker/src/video/game/Brick.java</file>
         </group>
     </open-files>
 </project-private>

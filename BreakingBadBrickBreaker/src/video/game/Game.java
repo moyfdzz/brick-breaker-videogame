@@ -45,7 +45,7 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
-        enemies = new LinkedList<Enemy>();
+        enemies = new LinkedList<Brick>();
         this.gameOver = false;
         this.paused = false;
     }
@@ -139,14 +139,6 @@ public class Game implements Runnable {
         this.keyManager = keyManager;
     }
 
-    public LinkedList<Enemy> getEnemies() {
-        return this.enemies;
-    }
-
-    public void setEnemies(LinkedList<Enemy> enemies) {
-        this.enemies = enemies;
-    }
-
     public boolean getGameOver() {
         return this.gameOver;
     }
@@ -162,31 +154,22 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(getWidth() / 2 - 50, getHeight() / 2, 150, 150, this);
+        player = new Player(getWidth() / 2 , getHeight() , 50, 20, this);
         display.getJframe().addKeyListener(keyManager);
         
-<<<<<<< HEAD
         for (int i = 0; i <= 9; i++) {
-            enemies.add(new Enemy(30*i, 0, 75, 75, this));
+            enemies.add(new Brick(50*i, 0, 30, 10, this));
         }
         for (int i = 0; i <= 8; i++) {
-            enemies.add(new Enemy(30+30*i, 50, 75, 75, this));
+            enemies.add(new Brick(25+50*i, 50, 30, 10, this));
         }
         for (int i = 0; i <= 9; i++) {
-            enemies.add(new Enemy(30*i, 150, 75, 75, this));
+            enemies.add(new Brick(50*i, 100, 30, 10, this));
         }
         for (int i = 0; i <= 8; i++) {
-            enemies.add(new Enemy(30+30*i, 200, 75, 75, this));
-=======
-        int posX, posY, randomDirection;
+            enemies.add(new Brick(25+50*i, 150, 30, 10, this));
+        }
         
-        for (int i = 0; i <= (int)(Math.random() * ((15 - 10) + 1)) + 10; i++) {
-            posX = (int)(Math.random() * ((getWidth()) + 1));
-            posY = (int)(Math.random() * (-100));
-            randomDirection = (int)(Math.random() * ((2 - 1) + 1)) + 1;
-            enemies.add(new Brick(posX, posY, 75, 75, this, randomDirection));
->>>>>>> df7ca5e626808e562c49f4399c31432ff6dfec8a
-        }
     }
     
     public KeyManager getKeyManager() {
@@ -195,7 +178,7 @@ public class Game implements Runnable {
     
     private void tick() {
         keyManager.tick();
-        /*
+        
         if(keyManager.P == true)
         {
             setPaused(true);
@@ -207,18 +190,16 @@ public class Game implements Runnable {
 
         if(!isGameOver() && !isPaused())
         {
-            */
-          player.tick();
-
-          for(int i = 0;  i <= enemies.size(); i++)
+         for(int i = 0;  i <= enemies.size(); i++)
           {
               if(enemies.get(i).getLives() == 0)
                 enemies.remove(i);
               
-                else enemies.get(i).tick();
+            else enemies.get(i).tick();
           }   
-          
-       // }
+          player.tick();
+    
+        }
         
     }
     
@@ -233,6 +214,7 @@ public class Game implements Runnable {
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         } else {
+            
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null);
             
@@ -245,7 +227,6 @@ public class Game implements Runnable {
                         enemies.get(i).render(g);
                 }
             
-                g.drawString( "Lives : " + player.getLives() , 0 , getHeight());
                 g.drawString( "Score : " + player.getScore(), getWidth() - 100, getHeight());
             }
             else {
