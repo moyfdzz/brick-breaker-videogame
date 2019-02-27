@@ -9,8 +9,8 @@ import java.awt.Rectangle;
  */
 public class Player extends Item {
     
-    private int width;
-    private int height;
+    private int width;                  // the width of the player
+    private int height;                 // the height of the player
     private Game game;
     private int velocity;               // variable for the velocity of the player
     private int lives;                  // the lives of the player
@@ -52,7 +52,7 @@ public class Player extends Item {
 
     /**
      * To get the velocity of the player
-     * @return 
+     * @return velocity
      */
     public int getVelocity() {
         return velocity;
@@ -60,17 +60,19 @@ public class Player extends Item {
 
     /**
      * To get the number of lives of the player
-     * @return 
+     * @return an <code>int</code> value with the number of lives of the player
      */
     public int getLives() {
         return lives;
     }
     
+    /**
+     * To get the score of the player
+     * @return an <code>int</code> value with the score of the player
+     */
     public int getScore() {
         return score;
     }
-
-    
     
     /**
      * To set the width of the window of the game
@@ -104,6 +106,10 @@ public class Player extends Item {
         this.lives = lives;
     }
     
+    /**
+     * To set the score of the player
+     * @param score
+     */
     public void setScore(int score) {
         this.score = score;
     }
@@ -140,10 +146,6 @@ public class Player extends Item {
         
         if (game.getKeyManager().SPACE) { // moves down + left
         }
-
-
-
-        
 
         if (getX() + 150 >= game.getWidth()) { // right side of the player
             setX(game.getWidth() - 150);

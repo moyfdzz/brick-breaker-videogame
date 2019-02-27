@@ -35,18 +35,18 @@ public class Brick extends Item {
         this.lives = 3;
     }
 
-    public Game getGame() {
-        return this.game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
+    /**
+     * To get the number of lives of the brick
+     * @return an <code>int</code> value with the number of lives of the brick
+     */
     public int getLives() {
         return this.lives;
     }
 
+    /**
+     * To set the number of lives of the brick
+     * @param lives 
+     */
     public void setLives(int lives) {
         this.lives = lives;
     }
@@ -66,7 +66,6 @@ public class Brick extends Item {
     public int getHeight() {
         return height;
     }
-
     
     /**
      * To set the width of the window of the game
