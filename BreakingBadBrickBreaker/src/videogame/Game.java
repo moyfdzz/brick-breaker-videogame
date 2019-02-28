@@ -154,7 +154,7 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(getWidth() / 2 , getHeight() , 50, 20, this);
+        player = new Player(getWidth()/2, getHeight() , 50, 20, this);
         display.getJframe().addKeyListener(keyManager);
         
         for (int i = 0; i <= 9; i++) {
