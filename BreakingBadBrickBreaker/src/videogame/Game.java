@@ -27,7 +27,7 @@ public class Game implements Runnable {
     private boolean running;    // to set the game
     private Player player;      // variable for the player
     private KeyManager keyManager;
-    private LinkedList<Brick> enemies;
+    private LinkedList<Brick> bricks;
     private boolean gameOver;
     private boolean paused;         // to determine if the game is paused
     
@@ -45,7 +45,7 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
-        enemies = new LinkedList<Brick>();
+        bricks = new LinkedList();
         this.gameOver = false;
         this.paused = false;
     }
@@ -154,20 +154,20 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(getWidth()/2, getHeight() , 50, 20, this);
+        player = new Player(getWidth()/2, getHeight() - 100, 50, 20, this);
         display.getJframe().addKeyListener(keyManager);
         
         for (int i = 0; i <= 9; i++) {
-            enemies.add(new Brick(50*i, 0, 30, 10, this));
+            bricks.add(new Brick(50*i, 0, 30, 10, this));
         }
         for (int i = 0; i <= 8; i++) {
-            enemies.add(new Brick(25+50*i, 50, 30, 10, this));
+            bricks.add(new Brick(25+50*i, 50, 30, 10, this));
         }
         for (int i = 0; i <= 9; i++) {
-            enemies.add(new Brick(50*i, 100, 30, 10, this));
+            bricks.add(new Brick(50*i, 100, 30, 10, this));
         }
         for (int i = 0; i <= 8; i++) {
-            enemies.add(new Brick(25+50*i, 150, 30, 10, this));
+            bricks.add(new Brick(25+50*i, 150, 30, 10, this));
         }
         
     }
@@ -179,8 +179,7 @@ public class Game implements Runnable {
     private void tick() {
         keyManager.tick();
         
-        if(keyManager.P == true)
-        {
+        if(keyManager.P == true) {
             setPaused(true);
         }
         
@@ -188,17 +187,17 @@ public class Game implements Runnable {
             setGameOver(true);
         }
 
-        if(!isGameOver() && !isPaused())
-        {
-         for(int i = 0;  i <= enemies.size(); i++)
-          {
-              if(enemies.get(i).getLives() == 0)
-                enemies.remove(i);
-              
-            else enemies.get(i).tick();
-          }   
+        if(!isGameOver() && !isPaused()) {
+            for(int i = 0;  i <= bricks.size(); i++)    {
+                if(bricks.get(i).getLives() == 0) {
+                    bricks.remove(i);
+                }
+                else {
+                    bricks.get(i).tick();
+                }
+          }  
+            
           player.tick();
-    
         }
         
     }
@@ -223,8 +222,8 @@ public class Game implements Runnable {
             
             if(!isGameOver()) {
                 player.render(g);
-                for (int i = 0; i < enemies.size(); i++) {
-                        enemies.get(i).render(g);
+                for (int i = 0; i < bricks.size(); i++) {
+                        bricks.get(i).render(g);
                 }
             
                 g.drawString( "Score : " + player.getScore(), getWidth() - 100, getHeight());

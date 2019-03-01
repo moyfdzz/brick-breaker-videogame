@@ -144,34 +144,15 @@ public class Player extends Item {
             setX(getX() + getVelocity());
         }
         
-        if (game.getKeyManager().SPACE) { // moves down + left
+        if (game.getKeyManager().SPACE) {
+        }
+        
+        if (game.getKeyManager().P) {
         }
 
         if (getX() + 150 >= game.getWidth()) { // right side of the player
             setX(game.getWidth() - 150);
         } else if (getX() <= 0) { // // left side of the player
-            setX(0);
-        }
-
-        if (getY() + 80 >= game.getHeight()) { // top side of the player
-            setY(game.getHeight() - 80);
-        } else if (getY() <= -20) { // bottom side of the player
-            setY(-20);
-        }
-        
-        //bot side of the window
-        if (getY() + 150 >= game.getHeight()) {
-            setY(game.getHeight() - 150);
-        }
-        else if (getY() <= 0) { //top side of the window
-            setY(0);
-        }
-        
-        //right side of the window
-        if (getX() + 100 >= game.getWidth()) {
-            setX(game.getWidth() - 100);
-        }
-        else if (getX() <= 0) {
             setX(0);
         }
     }
