@@ -150,8 +150,8 @@ public class Player extends Item {
         if (game.getKeyManager().P) {
         }
 
-        if (getX() + 150 >= game.getWidth()) { // right side of the player
-            setX(game.getWidth() - 150);
+        if (getX() + getWidth() >= game.getWidth()) { // right side of the player
+            setX(game.getWidth() - getWidth());
         } else if (getX() <= 0) { // // left side of the player
             setX(0);
         }
