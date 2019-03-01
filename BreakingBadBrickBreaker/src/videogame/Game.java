@@ -43,7 +43,7 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
-        bricks = new LinkedList();
+        bricks = new LinkedList<Brick>();
         this.gameOver = false;
         this.paused = false;
     }
@@ -256,9 +256,10 @@ public class Game implements Runnable {
         }
         
         if(!isGameOver() && !isPaused()) {
-            for(int i = 0;  i <= bricks.size(); i++) {
+            
+            for(int i = 0;  i < bricks.size(); i++) {
                 if(bricks.get(i).getLives() == 0) {
-                    bricks.remove(i);
+                    bricks.remove(bricks.get(i));
                 }
                 else {
                     bricks.get(i).tick();
