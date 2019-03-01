@@ -17,27 +17,25 @@ import java.util.LinkedList;
  */
 public class Game implements Runnable {
 
-    private BufferStrategy bs;	// to have several buffers when	displaying
-    private Graphics g;         // to paint objects
-    private Display display;	// to display in the game
-    String title;															//	title	of	the	window
+    private BufferStrategy bs;          // to have several buffers when	displaying
+    private Graphics g;                 // to paint objects
+    private Display display;            // to display in the game
+    String title;			// the title of the window												//	title	of	the	window
     private final int width;		// width of the	window
     private final int height;		// height of the window
-    private Thread thread;	// thread to create the	game
-    private boolean running;    // to set the game
-    private Player player;      // variable for the player
-    private KeyManager keyManager;
-    private LinkedList<Brick> bricks;
-    private boolean gameOver;
-    private boolean paused;         // to determine if the game is paused
-    
-    
+    private Thread thread;              // thread to create the	game
+    private boolean running;            // to set the game
+    private Player player;              // variable for the player
+    private KeyManager keyManager;      // variable for the key manager
+    private LinkedList<Brick> bricks;   // linked list of the bricks of the game
+    private boolean gameOver;           // to determine if the game is over
+    private boolean paused;             // to determine if the game is paused
+        
     /**
-     * to	create	title,	width	and	height	and	set	the	game	is	still	not	running
-     *
-     * @param	title	to	set	the	title	of	the	window
-     * @param	width	to	set	the	width	of	the	window
-     * @param	height	to	set	the	height	of	the	window
+     * To create game with title, width, height and status of running
+     * @param title
+     * @param width
+     * @param height 
      */
     public Game(String title, int width, int height) {
         this.title = title;
@@ -50,103 +48,173 @@ public class Game implements Runnable {
         this.paused = false;
     }
 
+    /**
+     * Returns a boolean value to know whether the game is paused or not
+     * @return paused
+     */
     public boolean isPaused() {
         return paused;
     }
 
+    /**
+     * Sets the status of the game either paused or not paused
+     * @param paused 
+     */
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
     
+    /**
+     * Returns the width of the window
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
     
+    /**
+     * Returns the height of the window
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Returns a boolean value to know whether the game is over or not
+     * @return 
+     */
     public boolean isGameOver() {
         return gameOver;
     }
 
-
+    /**
+     * Sets the status of the game either over or not over
+     * @param gameOver 
+     */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
-
+    /**
+     * Returns the buffer strategy
+     * @return bs
+     */
     public BufferStrategy getBs() {
         return this.bs;
     }
 
+    /**
+     * Sets the buffer strategy
+     * @param bs 
+     */
     public void setBs(BufferStrategy bs) {
         this.bs = bs;
     }
 
+    /**
+     * Returns the graphics
+     * @return g
+     */
     public Graphics getG() {
         return this.g;
     }
 
+    /**
+     * Sets the graphics
+     * @param g 
+     */
     public void setG(Graphics g) {
         this.g = g;
     }
 
+    /**
+     * Returns the display
+     * @return display
+     */
     public Display getDisplay() {
         return this.display;
     }
 
+    /**
+     * Sets the display
+     * @param display 
+     */
     public void setDisplay(Display display) {
         this.display = display;
     }
 
+    /**
+     * Returns the title
+     * @return title
+     */
     public String getTitle() {
         return this.title;
     }
 
+    /**
+     * Sets the title
+     * @param title 
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Returns the thread
+     * @return 
+     */
     public Thread getThread() {
         return this.thread;
     }
 
+    /**
+     * Sets the thread
+     * @param thread 
+     */
     public void setThread(Thread thread) {
         this.thread = thread;
     }
 
+    /**
+     * Returns the status of running
+     * @return running
+     */
     public boolean isRunning() {
         return this.running;
     }
 
-    public boolean getRunning() {
-        return this.running;
-    }
-
+    /**
+     * Sets the status of running
+     * @param running 
+     */
     public void setRunning(boolean running) {
         this.running = running;
     }
 
+    /**
+     * Returns the player
+     * @return player
+     */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+     * Sets the player
+     * @param player 
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
+    
+    /**
+     * Sets the key manager
+     * @param keyManager 
+     */
     public void setKeyManager(KeyManager keyManager) {
         this.keyManager = keyManager;
     }
-
-    public boolean getGameOver() {
-        return this.gameOver;
-    }
-
-    public boolean getPaused() {
-        return this.paused;
-    }
-
     
     /**
      * initializing	the	display	window	of	the	game
@@ -186,9 +254,9 @@ public class Game implements Runnable {
         if (player.getLives() == 0) {
             setGameOver(true);
         }
-
+        
         if(!isGameOver() && !isPaused()) {
-            for(int i = 0;  i <= bricks.size(); i++)    {
+            for(int i = 0;  i <= bricks.size(); i++) {
                 if(bricks.get(i).getLives() == 0) {
                     bricks.remove(i);
                 }
@@ -196,7 +264,7 @@ public class Game implements Runnable {
                     bricks.get(i).tick();
                 }
           }  
-            
+        
           player.tick();
         }
         
