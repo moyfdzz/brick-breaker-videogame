@@ -127,8 +127,7 @@ public class Player extends Item {
      * @param obj
      * @return Rectangle
      */
-    public boolean intersecta(Brick obj) {
-
+    public boolean intersecta(Ball obj) {
         return getPerimetro().intersects(obj.getPerimetro());
     }
     

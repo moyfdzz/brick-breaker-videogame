@@ -6,6 +6,7 @@
 package videogame;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -68,6 +69,22 @@ public class Ball extends Item {
         this.velY = velY;
     }
 
+    /**
+     * To get the perimeter of the rectangle of the ball
+     * @return Rectangle
+     */
+    public Rectangle getPerimetro() {
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
+    }
+
+    /**
+     * To determine if the object is intersecting with another object
+     * @param obj
+     * @return Rectangle
+     */
+    public boolean intersecta(Player obj) {
+        return getPerimetro().intersects(obj.getPerimetro());
+    }
     
     @Override
     public void tick() {
@@ -77,9 +94,5 @@ public class Ball extends Item {
     @Override
     public void render(Graphics g) {
         
-    }
-    
-    
-    
-    
+    }   
 }
