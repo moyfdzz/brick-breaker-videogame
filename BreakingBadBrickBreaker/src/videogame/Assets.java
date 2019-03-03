@@ -16,19 +16,20 @@ public class Assets {
     public static BufferedImage background;
     public static BufferedImage player;
     public static BufferedImage enemy;
+    public static BufferedImage intro;
     public static BufferedImage lives;
     public static BufferedImage gameOver;
     public static SoundClip death;
+    public static SoundClip theme;
     public static BufferedImage brickSkins[];
     
     public static void init() {
-        background = ImageLoader.loadImage("/images/mario_bros_background.jpg");
+        background = ImageLoader.loadImage("/images/background.jpeg");
         player = ImageLoader.loadImage("/images/bar.png");
-        enemy = ImageLoader.loadImage("/images/goomba.png");
-        lives = ImageLoader.loadImage("/images/heart.png");
+        intro = ImageLoader.loadImage("/images/intro.jpg");
         gameOver = ImageLoader.loadImage("/images/game_over.jpg");
         death = new SoundClip("/sounds/death.wav"); 
-
+        theme = new SoundClip("/sounds/theme_song.wav");
         brickSkins = new BufferedImage[3];
         brickSkins[0] = ImageLoader.loadImage("/images/brick_hp_1.png");
         brickSkins[1] = ImageLoader.loadImage("/images/brick_hp_2.png");

@@ -31,6 +31,7 @@ public class Game implements Runnable {
     private boolean gameOver;           // to determine if the game is over
     private boolean paused;             // to determine if the game is paused
         
+        
     /**
      * To create game with title, width, height and status of running
      * @param title
@@ -221,7 +222,11 @@ public class Game implements Runnable {
      */
     private void init() {
         display = new Display(title, width, height);
+        
         Assets.init();
+        //play the theme song of the game
+        Assets.theme.play();
+        
         player = new Player(getWidth()/2, getHeight() - 100, 50, 20, this);
         display.getJframe().addKeyListener(keyManager);
         
@@ -248,14 +253,15 @@ public class Game implements Runnable {
         keyManager.tick();
         
         if(keyManager.P == true) {
-            setPaused(true);
+            setPaused( isPaused() ? false : true );
         }
         
         if (player.getLives() == 0) {
             setGameOver(true);
+            Assets.theme.stop();
         }
         
-        if(!isGameOver() && !isPaused()) {
+        if(!isGameOver() && !isPaused()){
             
             for(int i = 0;  i < bricks.size(); i++) {
                 if(bricks.get(i).getLives() == 0) {
@@ -265,7 +271,6 @@ public class Game implements Runnable {
                     bricks.get(i).tick();
                 }
           }  
-        
           player.tick();
         }
         
@@ -284,23 +289,34 @@ public class Game implements Runnable {
         } else {
             
             g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height, null);
+            g.drawImage(Assets.background, 0, 0, getWidth(), getHeight(), null);
             
-            g.setColor(Color.black);
-            g.setFont(new Font("Serif", Font.BOLD, 20));
+            g.setColor(Color.WHITE);
+            
             
             if(!isGameOver()) {
+                
                 player.render(g);
                 for (int i = 0; i < bricks.size(); i++) {
                         bricks.get(i).render(g);
                 }
-            
+                g.setFont(new Font("Serif", Font.BOLD, 20));
                 g.drawString( "Score : " + player.getScore(), getWidth() - 100, getHeight());
-            }
-            else {
-                g.drawImage(Assets.gameOver, 0, 0, width, height, null);
-            }
             
+            }
+            if(isPaused())
+            {
+                g.setFont(new Font("Serif", Font.BOLD, 120));
+                g.drawString("Paused", getWidth()/2-200, getHeight()/2);
+                g.setFont(new Font("Serif", Font.BOLD, 50));
+                g.drawString("Current Score: " + player.getScore(), getWidth()/2-200, getHeight()/2+200);
+            }
+            if(isGameOver())
+            {
+                g.setFont(new Font("Serif", Font.BOLD, 120));
+                g.drawString("Game", getWidth()/2-100, getHeight()/2-100);
+                g.drawString("Over", getWidth()/2+50, getHeight()/2+50);
+            }
             bs.show();
             g.dispose();
         }

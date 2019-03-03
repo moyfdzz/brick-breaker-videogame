@@ -33,7 +33,7 @@ public class Brick extends Item {
         this.width = width;
         this.height = height;
         this.game = game;      
-        this.lives = 3;
+        this.lives =  (int)(Math.random() * ((3 - 1) + 1)) + 1;
         this.alive = true;
     }
 
