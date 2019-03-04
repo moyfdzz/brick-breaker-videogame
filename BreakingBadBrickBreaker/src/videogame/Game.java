@@ -393,10 +393,7 @@ public class Game implements Runnable {
                 PrintWriter fileOut = new PrintWriter(new FileWriter(lastSave));
                 fileOut.println(bricks.size());
                 for (int i = 0; i < bricks.size(); i++) {
-
-                    Brick block;
-                    block = (Brick) bricks.get(i);
-                    fileOut.println(block.toString());
+                    fileOut.println(bricks.get(i).toString());
                 }
                 fileOut.println(ball.toString());
                 fileOut.println(player.toString());
