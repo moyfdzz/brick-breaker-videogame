@@ -36,6 +36,15 @@ public class Brick extends Item {
         this.lives =  (int)(Math.random() * ((3 - 1) + 1)) + 1;
         this.alive = true;
     }
+    // to 
+    public Brick(int x, int y, int width, int height, int lives, Game game) {
+        super(x, y);
+        this.width = width;
+        this.height = height;
+        this.game = game;      
+        this.lives =  lives;
+        this.alive = true;
+    }
 
     /**
      * To get the number of lives of the brick
@@ -124,4 +133,10 @@ public class Brick extends Item {
         g.drawImage(Assets.brickSkins[getLives()-1] , getX(), getY(), getWidth(), getHeight(), null);
 
     }
+
+    @Override
+    public String toString() {
+        return  x + "," + y + "," + width + "," + height + "," + lives;
+    }
+    
 }

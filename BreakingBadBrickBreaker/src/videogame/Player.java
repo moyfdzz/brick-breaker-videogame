@@ -33,6 +33,17 @@ public class Player extends Item {
         this.lives = 3;
         this.score = 0;
     }
+
+    public Player(int width, int height, Game game, int velocity, int lives, int score, int x, int y) {
+        super(x, y);
+        this.width = width;
+        this.height = height;
+        this.game = game;
+        this.velocity = velocity;
+        this.lives = lives;
+        this.score = score;
+    }
+    
     
     /**
      * To get the width of the window of the game
@@ -164,4 +175,10 @@ public class Player extends Item {
     public void render(Graphics g) {
         g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
     }
+
+    @Override
+    public String toString() {
+        return x + "," + y + "," + width + "," + height  + "," + velocity + "," + lives + "," + score;
+    }
+
 }

@@ -94,5 +94,11 @@ public class Ball extends Item {
     @Override
     public void render(Graphics g) {
         
-    }   
+    }
+
+    @Override
+    public String toString() {
+        return x + "," + y + "," + width + "," + height + "," + velX + "," + velY;
+    }
+    
 }

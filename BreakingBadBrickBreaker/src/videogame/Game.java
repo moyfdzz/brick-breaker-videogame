@@ -9,7 +9,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,8 +37,12 @@ public class Game implements Runnable {
     private Player player;              // variable for the player
     private KeyManager keyManager;      // variable for the key manager
     private LinkedList<Brick> bricks;   // linked list of the bricks of the game
+    private Ball ball;
     private boolean gameOver;           // to determine if the game is over
     private boolean paused;             // to determine if the game is paused
+    private String lastSave;    //Nombre del archivo.
+    private String[] arr;    //Arreglo del archivo divido.
+    private int[] data;
         
         
     /**
@@ -44,9 +57,10 @@ public class Game implements Runnable {
         this.height = height;
         running = false;
         keyManager = new KeyManager();
-        bricks = new LinkedList<Brick>();
         this.gameOver = false;
         this.paused = false;
+        this.data = new int[4];
+        this.lastSave = "lastSave.txt";
     }
 
     /**
@@ -226,8 +240,11 @@ public class Game implements Runnable {
         Assets.init();
         //play the theme song of the game
         Assets.theme.play();
-        
+        bricks = new LinkedList<Brick>();
+        ball = new Ball(getWidth()/2, getHeight(), 50, 20, this, 0 ,0);
         player = new Player(getWidth()/2, getHeight() - 100, 50, 20, this);
+        
+        
         display.getJframe().addKeyListener(keyManager);
         
         for (int i = 0; i <= 9; i++) {
@@ -249,12 +266,17 @@ public class Game implements Runnable {
         return keyManager;
     }
     
-    private void tick() {
+    private void tick() throws IOException {
         keyManager.tick();
         
         if(keyManager.P == true) {
             setPaused( isPaused() ? false : true );
         }
+        if(keyManager.S == true)
+        {
+            saveGame();
+        }
+        
         
         if (player.getLives() == 0) {
             setGameOver(true);
@@ -302,13 +324,11 @@ public class Game implements Runnable {
                 }
                 g.setFont(new Font("Serif", Font.BOLD, 20));
                 g.drawString( "Score : " + player.getScore(), getWidth() - 100, getHeight());
-            
             }
             if(isPaused())
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Paused", getWidth()/2-200, getHeight()/2);
-                g.setFont(new Font("Serif", Font.BOLD, 50));
                 g.drawString("Current Score: " + player.getScore(), getWidth()/2-200, getHeight()/2+200);
             }
             if(isGameOver())
@@ -356,7 +376,11 @@ public class Game implements Runnable {
             lastTime = now;
             
             if (delta >= 1) {
-                tick();
+                try {
+                    tick();
+                } catch (IOException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 render();
                 delta--;
             }
@@ -364,4 +388,58 @@ public class Game implements Runnable {
         stop();
     }
 
+    private void saveGame() throws IOException {
+                                                          
+                PrintWriter fileOut = new PrintWriter(new FileWriter(lastSave));
+                fileOut.println(bricks.size());
+                for (int i = 0; i < bricks.size(); i++) {
+
+                    Brick block;
+                    block = (Brick) bricks.get(i);
+                    fileOut.println(block.toString());
+                }
+                fileOut.println(ball.toString());
+                fileOut.println(player.toString());
+                fileOut.close();
+        }
+    
+    
+    private void loadGame() throws IOException
+    {
+          bricks.clear();
+          BufferedReader fileIn;
+                try {
+                        fileIn = new BufferedReader(new FileReader(lastSave));
+                } catch (FileNotFoundException e){
+                        File puntos = new File(lastSave);
+                        PrintWriter fileOut = new PrintWriter(puntos);
+                        fileOut.println("100,demo");
+                        fileOut.close();
+                        fileIn = new BufferedReader(new FileReader(lastSave));
+                }
+                String dato = fileIn.readLine();
+                
+                arr = dato.split(",");
+                
+                int num = (Integer.parseInt(arr[0]));
+                //while(dato != null) {  
+                for(int i = 0; i < num ; i++)   
+                {
+                      arr = dato.split(",");
+                      
+                      for(int j = 0; j < 4 ; j++)   
+                        {
+                        data[j] = (Integer.parseInt(arr[j]));
+                        }
+                      bricks.add(new Brick(data[0],data[1],data[2],data[3],data[4], this));
+                      dato = fileIn.readLine();
+                }
+                
+    
+                fileIn.close();
+        
+    }
+   
+
 }
+
