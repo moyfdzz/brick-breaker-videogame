@@ -242,22 +242,22 @@ public class Game implements Runnable {
         Assets.theme.play();
         bricks = new LinkedList<Brick>();
         ball = new Ball(getWidth()/2, getHeight(), 50, 20, this, 0 ,0);
-        player = new Player(getWidth()/2, getHeight() - 100, 50, 20, this);
+        player = new Player(getWidth()/2, getHeight() - 100, 120, 30, this);
         
         
         display.getJframe().addKeyListener(keyManager);
         
-        for (int i = 0; i <= 9; i++) {
-            bricks.add(new Brick(50*i, 0, 30, 10, this));
-        }
-        for (int i = 0; i <= 8; i++) {
-            bricks.add(new Brick(25+50*i, 50, 30, 10, this));
+        for (int i = 0; i <= 10; i++) {
+            bricks.add(new Brick(100*i+25, 25, 70, 25, this));
         }
         for (int i = 0; i <= 9; i++) {
-            bricks.add(new Brick(50*i, 100, 30, 10, this));
+            bricks.add(new Brick(100*i+75, 75, 70, 25, this));
         }
-        for (int i = 0; i <= 8; i++) {
-            bricks.add(new Brick(25+50*i, 150, 30, 10, this));
+        for (int i = 0; i <= 10; i++) {
+            bricks.add(new Brick(100*i+25, 125, 70, 25, this));
+        }
+        for (int i = 0; i <= 9; i++) {
+            bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
         
     }

@@ -29,7 +29,7 @@ public class Player extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        this.velocity = 5;
+        this.velocity = 10;
         this.lives = 3;
         this.score = 0;
     }
