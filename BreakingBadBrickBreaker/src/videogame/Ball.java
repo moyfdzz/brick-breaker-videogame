@@ -88,6 +88,31 @@ public class Ball extends Item {
     
     @Override
     public void tick() {
+        
+
+        //right margin
+        if( getX() + getWidth() >= game.getWidth()){
+            setX(game.getWidth()- getWidth());
+            setVelX(-getVelX());
+        }
+        //left margin
+        else if (getX() <= 0){
+            setX(0);
+            setVelX(-getVelX());
+        }
+        //top margin
+        else if( getY() + getHeight() >= game.getHeight()){
+            setY(game.getHeight()- getHeight());
+            setVelY(-getVelY());
+        }
+        //bottom margin
+        else if (getY() <= -getHeight()){
+            setY(-getHeight());
+            setVelY(-getVelY());
+        }
+        
+        setY(getY() + getVelY());  
+        setX(getX() + getVelX()); 
     }
 
     @Override

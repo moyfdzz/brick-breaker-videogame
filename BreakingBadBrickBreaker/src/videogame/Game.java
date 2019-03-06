@@ -241,10 +241,8 @@ public class Game implements Runnable {
         //play the theme song of the game
        // Assets.theme.play();
         bricks = new LinkedList<Brick>();
-        ball = new Ball(getWidth()/2, getHeight()/2, 50, 50, this, 0 ,0);
+        ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 15 ,0);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, 120, 30, this);
-        
-        
         display.getJframe().addKeyListener(keyManager);
         
         for (int i = 0; i <= 10; i++) {
@@ -259,7 +257,6 @@ public class Game implements Runnable {
         for (int i = 0; i <= 9; i++) {
             bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
-        
     }
     
     public KeyManager getKeyManager() {
@@ -270,7 +267,7 @@ public class Game implements Runnable {
         keyManager.tick();
         
         if(getKeyManager().isP() == true) {
-            setPaused( isPaused() ? false : true );
+            setPaused(isPaused() ? false : true);
             getKeyManager().setP(false);
         }
         if(getKeyManager().isG() == true)
@@ -301,6 +298,12 @@ public class Game implements Runnable {
           }  
           ball.tick();
           paddle.tick();
+        }
+        if(isGameOver() && getKeyManager().isR() == true)
+        {
+         setGameOver(false);
+         restartGame();
+         getKeyManager().setR(false);   
         }
         
     }
@@ -441,9 +444,32 @@ public class Game implements Runnable {
                       bricks.add(new Brick(data[0],data[1],data[2],data[3],data[4], this));
                       dato = fileIn.readLine();
                 }
-                
-    
                 fileIn.close();
+        
+    }
+
+    private void restartGame() {
+      
+       paddle.setScore(0);
+       paddle.setLives(3);
+       paddle.setX(getWidth()/2);
+       paddle.setY(getHeight() - 100);
+       ball.setX(this.getWidth()/2);
+       ball.setY(this.getHeight()/2-50);
+       
+       
+       for (int i = 0; i <= 10; i++) {
+            bricks.add(new Brick(100*i+25, 25, 70, 25, this));
+        }
+        for (int i = 0; i <= 9; i++) {
+            bricks.add(new Brick(100*i+75, 75, 70, 25, this));
+        }
+        for (int i = 0; i <= 10; i++) {
+            bricks.add(new Brick(100*i+25, 125, 70, 25, this));
+        }
+        for (int i = 0; i <= 9; i++) {
+            bricks.add(new Brick(100*i+75, 175, 70, 25, this));
+        }
         
     }
    

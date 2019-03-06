@@ -19,6 +19,7 @@ public class KeyManager implements KeyListener{
     public boolean P;
     public boolean G;
     public boolean C;
+    public boolean R;
     
     private boolean keys[];
 
@@ -44,6 +45,14 @@ public class KeyManager implements KeyListener{
 
     public void setC(boolean C) {
         keys[KeyEvent.VK_C] = C;
+    }
+
+    public void setR(boolean R) {
+        keys[KeyEvent.VK_R] = R;
+    }
+    
+    public boolean isR() {
+        return keys[KeyEvent.VK_R];
     }
     
     public boolean isRIGHT() {
@@ -97,5 +106,6 @@ KeyManager() {
         P = keys[KeyEvent.VK_P];
         G = keys[KeyEvent.VK_G];
         C = keys[KeyEvent.VK_C];
+        R = keys[KeyEvent.VK_R];
     }
 }
