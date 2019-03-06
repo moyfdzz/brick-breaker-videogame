@@ -241,7 +241,7 @@ public class Game implements Runnable {
         //play the theme song of the game
        // Assets.theme.play();
         bricks = new LinkedList<Brick>();
-        ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 15 ,0);
+        ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 5, 5);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, 120, 30, this);
         display.getJframe().addKeyListener(keyManager);
         
@@ -287,23 +287,37 @@ public class Game implements Runnable {
         }
         
         if(!isGameOver() && !isPaused()){
-            
-            for(int i = 0;  i < bricks.size(); i++) {
+
+            if (ball.intersecta(paddle)) {
+                ball.setVelY(-ball.getVelY());
+
+                if (ball.getX() >= paddle.getX()) {
+                    ball.setVelX(-ball.getVelX());
+                }
+            }
+    
+            for (int i = 0; i < bricks.size(); i++) {
+                if (ball.intersecta(bricks.get(i))) {
+                    ball.setVelY(-ball.getVelY());
+                    bricks.get(i).setLives(bricks.get(i).getLives() - 1);
+                }
+
                 if(bricks.get(i).getLives() == 0) {
                     bricks.remove(bricks.get(i));
                 }
                 else {
                     bricks.get(i).tick();
                 }
-          }  
-          ball.tick();
-          paddle.tick();
+            }
+
+            ball.tick();
+            paddle.tick();
         }
-        if(isGameOver() && getKeyManager().isR() == true)
-        {
-         setGameOver(false);
-         restartGame();
-         getKeyManager().setR(false);   
+
+        if(isGameOver() && getKeyManager().isR() == true) {
+            setGameOver(false);
+            restartGame();
+            getKeyManager().setR(false);   
         }
         
     }
@@ -340,6 +354,7 @@ public class Game implements Runnable {
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Paused", getWidth()/2-200, getHeight()/2);
+                g.setFont(new Font("Serif", Font.BOLD, 60));
                 g.drawString("Current Score: " + paddle.getScore(), getWidth()/2-200, getHeight()/2+200);
             }
             if(isGameOver())
@@ -403,48 +418,56 @@ public class Game implements Runnable {
 
     private void saveGame() throws IOException {
                                                           
-                PrintWriter fileOut = new PrintWriter(new FileWriter(lastSave));
-                fileOut.println(bricks.size());
-                for (int i = 0; i < bricks.size(); i++) {
-                    fileOut.println(bricks.get(i).toString());
-                }
-                fileOut.println(ball.toString());
-                fileOut.println(paddle.toString());
-                fileOut.close();
-                
+        PrintWriter fileOut = new PrintWriter(new FileWriter(lastSave));
+        fileOut.println(bricks.size());
+        for (int i = 0; i < bricks.size(); i++) {
+            fileOut.println(bricks.get(i).getX());
+            fileOut.println(bricks.get(i).getY());
+            fileOut.println(bricks.get(i).getLives());
         }
+        fileOut.println(ball.getX());
+        fileOut.println(ball.getY());
+        fileOut.println(ball.getVelX());
+        fileOut.println(ball.getVelY());
+        
+        fileOut.println(paddle.getX());
+        fileOut.println(paddle.getY());
+        fileOut.println(paddle.getLives());
+        fileOut.println(paddle.getScore());
+       
+        fileOut.close();
+                
+    }
     
     
     private void loadGame() throws IOException
     {
-          bricks.clear();
-          BufferedReader fileIn;
-                try {
-                        fileIn = new BufferedReader(new FileReader(lastSave));
-                } catch (FileNotFoundException e){
-                        File puntos = new File(lastSave);
-                        PrintWriter fileOut = new PrintWriter(puntos);
-                        fileOut.println("100,demo");
-                        fileOut.close();
-                        fileIn = new BufferedReader(new FileReader(lastSave));
-                }
-                String dato = fileIn.readLine();
-                arr = dato.split(",");
-                
-                int num = (Integer.parseInt(arr[0]));
-                //while(dato != null) {  
-                for(int i = 0; i < num ; i++)   
-                {
-                      arr = dato.split(",");
-                      
-                      for(int j = 0; j < 4 ; j++)   
-                        {
-                        data[j] = (Integer.parseInt(arr[j]));
-                        }
-                      bricks.add(new Brick(data[0],data[1],data[2],data[3],data[4], this));
-                      dato = fileIn.readLine();
-                }
-                fileIn.close();
+        bricks.clear();
+        BufferedReader fileIn;
+              try {
+                      fileIn = new BufferedReader(new FileReader(lastSave));
+              } catch (FileNotFoundException e){
+                      File puntos = new File(lastSave);
+                      PrintWriter fileOut = new PrintWriter(puntos);
+                      fileOut.println("100,demo");
+                      fileOut.close();
+                      fileIn = new BufferedReader(new FileReader(lastSave));
+              }
+              String dato = fileIn.readLine();
+              int num = Integer.parseInt(dato);
+              int brickX, brickY,brickLives;
+              
+              for(int i = 0; i < num ; i++)   
+              {
+                         brickX = Integer.parseInt(fileIn.readLine());
+                         brickY = Integer.parseInt(fileIn.readLine());
+                         brickLives = Integer.parseInt(fileIn.readLine());
+                         
+                    bricks.add(new Brick(brickX,brickY,70,25,brickLives, this));
+              }
+              
+              fileIn.close();
+      
         
     }
 

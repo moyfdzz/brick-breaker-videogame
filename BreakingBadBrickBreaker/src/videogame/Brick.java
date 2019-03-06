@@ -18,8 +18,6 @@ public class Brick extends Item {
     private int height;
     private Game game;
     private int lives;
-    private boolean alive;      // Variable used to know whether render or not the brick
-    
     /**
      * Constructor to initialize an object of the type Brick with its attributes
      * @param x
@@ -34,7 +32,6 @@ public class Brick extends Item {
         this.height = height;
         this.game = game;      
         this.lives =  (int)(Math.random() * ((3 - 1) + 1)) + 1;
-        this.alive = true;
     }
     // to 
     public Brick(int x, int y, int width, int height, int lives, Game game) {
@@ -43,7 +40,6 @@ public class Brick extends Item {
         this.height = height;
         this.game = game;      
         this.lives =  lives;
-        this.alive = true;
     }
 
     /**
@@ -77,15 +73,6 @@ public class Brick extends Item {
     public int getHeight() {
         return height;
     }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-    
     /**
      * To set the width of the window of the game
      * @param width 

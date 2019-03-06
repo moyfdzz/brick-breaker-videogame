@@ -19,6 +19,7 @@ public class Ball extends Item {
     private Game game;
     private int velX;
     private int velY;
+    private int maxVel;
 
     public Ball(int x, int y, int width, int height, Game game, int velX, int velY) {
         super(x, y);
@@ -27,6 +28,7 @@ public class Ball extends Item {
         this.game = game;
         this.velX = velX;
         this.velY = velY;
+        maxVel = 15;
     }
 
     public int getWidth() {
@@ -69,6 +71,14 @@ public class Ball extends Item {
         this.velY = velY;
     }
 
+    public int getMaxVel() {
+        return maxVel;
+    }
+
+    public void setMaxVel(int maxVel) {
+        this.maxVel = maxVel;
+    }
+
     /**
      * To get the perimeter of the rectangle of the ball
      * @return Rectangle
@@ -78,41 +88,45 @@ public class Ball extends Item {
     }
 
     /**
-     * To determine if the object is intersecting with another object
+     * To determine if the object is intersecting with the paddle
      * @param obj
      * @return Rectangle
      */
     public boolean intersecta(Paddle obj) {
         return getPerimetro().intersects(obj.getPerimetro());
     }
+
+    /**
+     * To determine if the object is intersecting with a brick
+     * @param obj
+     * @return Rectangle
+     */
+    public boolean intersecta(Brick obj) {
+        return getPerimetro().intersects(obj.getPerimetro());
+    }
     
     @Override
     public void tick() {
-        
-
-        //right margin
-        if( getX() + getWidth() >= game.getWidth()){
-            setX(game.getWidth()- getWidth());
-            setVelX(-getVelX());
-        }
-        //left margin
-        else if (getX() <= 0){
-            setX(0);
-            setVelX(-getVelX());
-        }
-        //top margin
-        else if( getY() + getHeight() >= game.getHeight()){
-            setY(game.getHeight()- getHeight());
-            setVelY(-getVelY());
-        }
-        //bottom margin
-        else if (getY() <= -getHeight()){
-            setY(-getHeight());
-            setVelY(-getVelY());
-        }
-        
         setY(getY() + getVelY());  
         setX(getX() + getVelX()); 
+
+        if (getX() + getWidth() >= game.getWidth()) { // Right margin of window
+            setVelX(-getVelX());
+        } else if (getX() <= 0) { // Left margin of window
+            setVelX(-getVelX());
+        }
+
+        if (getY() <= 0) { // Top margin of window
+            setVelY(-getVelY());
+        } 
+
+        if (getVelX() > getMaxVel()) {
+            setVelX(getMaxVel());
+        }
+
+        if (getVelY() > getMaxVel()) {
+            setVelY(getMaxVel());
+        }
     }
 
     @Override
