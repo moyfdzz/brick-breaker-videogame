@@ -248,7 +248,7 @@ public class Game implements Runnable {
         //play the theme song of the game
         Assets.theme.play();
         bricks = new LinkedList<Brick>();
-        ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 0, 0);
+        ball = new Ball(getWidth()/2, getHeight()-150, 25, 25, this, 0, 0);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, 120, 30, this);
         display.getJframe().addKeyListener(keyManager);
                 
@@ -287,8 +287,11 @@ public class Game implements Runnable {
         }
         if(getKeyManager().isSPACE() == true && !isStart()){
            setStart(true);
-           ball.setVelX(5);
-           ball.setVelY(-5);
+           
+           int randomVelX = (int) (Math.random() * 20) - 10;
+           
+           ball.setVelX(randomVelX);
+           ball.setVelY(-10);
            getKeyManager().setSPACE(false);
         }
         
@@ -311,7 +314,40 @@ public class Game implements Runnable {
         if(!isGameOver() && !isPaused()){
 
             if (ball.intersecta(paddle)) {
-                ball.setVelY(-ball.getVelY());                
+                int xBall = ball.getX();
+                int yBall = ball.getY();
+                int wBall = ball.getWidth();
+                int hBall = ball.getHeight();
+                int xPaddle = paddle.getX();
+                int yPaddle = paddle.getY();
+                int wPaddle = paddle.getWidth();
+                int hPaddle = paddle.getHeight();
+                
+                if (yBall >= yPaddle - hPaddle * 2) {
+                    if (xBall >= xPaddle + wPaddle / 5 && xBall <= xPaddle + (4 * wPaddle / 5)) {
+                        ball.setVelY(-ball.getVelY());
+                    }
+                    else {
+                        ball.setVelY(-ball.getVelY());
+                        ball.setVelX(-ball.getVelX());
+                    }
+                }                
+                
+                /*
+                if (yBall >= yPaddle - hPaddle * 2) {
+                    ball.setVelY(-ball.getVelY());
+                }
+                
+                */
+                
+                /*
+                
+                if (ball.getX() >= paddle.getX() + 50) {
+                    ball.setVelX(-ball.getVelX());
+                    ball.setVelY(-ball.getVelY());
+                }
+                */
+
             }
             
             if(ball.isBottom())
@@ -324,8 +360,8 @@ public class Game implements Runnable {
             {
                 ball.setVelX(0);
                 ball.setVelY(0);
-                ball.setX(paddle.getX()+25);
-                ball.setY(paddle.getY()-75);
+                ball.setX(paddle.getX() + paddle.getWidth() / 3 + 5);
+                ball.setY(paddle.getY() - ball.getHeight() * 2);
             }
     
             for (int i = 0; i < bricks.size(); i++) {
@@ -516,6 +552,7 @@ public class Game implements Runnable {
     }
 
     private void restartGame() {
+       ball.setBottom(false);
        setStart(false);
        paddle.setScore(0);
        paddle.setLives(3);
