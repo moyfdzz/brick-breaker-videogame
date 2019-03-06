@@ -456,8 +456,6 @@ public class Game implements Runnable {
        paddle.setY(getHeight() - 100);
        ball.setX(this.getWidth()/2);
        ball.setY(this.getHeight()/2-50);
-       
-       
        for (int i = 0; i <= 10; i++) {
             bricks.add(new Brick(100*i+25, 25, 70, 25, this));
         }
