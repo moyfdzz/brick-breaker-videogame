@@ -265,7 +265,12 @@ public class Game implements Runnable {
             bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
         
-        paddle.setMaxScore(bricks.size()*50);
+         for (int i = 0; i < bricks.size(); i++) {
+             for(int j = 0; j < bricks.get(i).getLives();j++)
+             {
+               paddle.setMaxScore(paddle.getMaxScore()+50);
+             }
+         }
 
     }
     
