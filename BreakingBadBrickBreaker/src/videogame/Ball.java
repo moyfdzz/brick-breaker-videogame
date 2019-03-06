@@ -88,7 +88,6 @@ public class Ball extends Item {
     
     @Override
     public void tick() {
-     
     }
 
     @Override

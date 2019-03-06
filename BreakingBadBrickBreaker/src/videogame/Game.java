@@ -341,6 +341,7 @@ public class Game implements Runnable {
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Game", getWidth()/2-100, getHeight()/2-100);
+                
                 g.setFont(new Font("Serif", Font.BOLD, 60));
                 g.drawString("Over", getWidth()/2+50, getHeight()/2+50);
             }
@@ -422,7 +423,6 @@ public class Game implements Runnable {
                         fileIn = new BufferedReader(new FileReader(lastSave));
                 }
                 String dato = fileIn.readLine();
-                
                 arr = dato.split(",");
                 
                 int num = (Integer.parseInt(arr[0]));
