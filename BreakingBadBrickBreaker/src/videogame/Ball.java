@@ -130,7 +130,7 @@ public class Ball extends Item {
         if (getY() <= 0) { // Top margin of window
             setVelY(-getVelY());
         } 
-        if (getY() >= getHeight()) { // Top margin of window
+        if (getY() <= -getHeight()) { // Top margin of window
             setBottom(true);
         } 
 

@@ -310,7 +310,7 @@ public class Game implements Runnable {
                 if (ball.getX() >= paddle.getX()) {
                     ball.setVelX(-ball.getVelX());
                 }
-                paddle.setScore(paddle.getScore()+50);
+                
             }
             
             if(ball.isBottom())
@@ -321,14 +321,17 @@ public class Game implements Runnable {
             }
             if(!isStart())
             {
-                ball.setX(paddle.getX());
-                ball.setY(paddle.getY()-50);
+                ball.setVelX(0);
+                ball.setVelY(0);
+                ball.setX(paddle.getX()+25);
+                ball.setY(paddle.getY()-75);
             }
     
             for (int i = 0; i < bricks.size(); i++) {
                 if (ball.intersecta(bricks.get(i))) {
                     ball.setVelY(-ball.getVelY());
                     bricks.get(i).setLives(bricks.get(i).getLives() - 1);
+                    paddle.setScore(paddle.getScore()+50);
                 }
 
                 if(bricks.get(i).getLives() == 0) {
