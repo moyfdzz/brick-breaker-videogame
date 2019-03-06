@@ -469,6 +469,7 @@ public class Game implements Runnable {
     
     private void loadGame() throws IOException
     {
+        setStart(false);
         bricks.clear();
         BufferedReader fileIn;
               try {
