@@ -40,9 +40,8 @@ public class Game implements Runnable {
     private Ball ball;
     private boolean gameOver;           // to determine if the game is over
     private boolean paused;             // to determine if the game is paused
+    private boolean start;             // to determine if the game is paused
     private String lastSave;    //Nombre del archivo.
-    private String[] arr;    //Arreglo del archivo divido.
-    private int[] data;
         
         
     /**
@@ -59,7 +58,7 @@ public class Game implements Runnable {
         keyManager = new KeyManager();
         this.gameOver = false;
         this.paused = false;
-        this.data = new int[4];
+        this.start = false;
         this.lastSave = "lastSave.txt";
     }
 
@@ -111,6 +110,14 @@ public class Game implements Runnable {
         this.gameOver = gameOver;
     }
 
+    public boolean isStart() {
+        return start;
+    }
+
+    public void setStart(boolean start) {
+        this.start = start;
+    }
+    
     /**
      * Returns the buffer strategy
      * @return bs
@@ -241,10 +248,10 @@ public class Game implements Runnable {
         //play the theme song of the game
        // Assets.theme.play();
         bricks = new LinkedList<Brick>();
-        ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 5, 5);
+        ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 0, 0);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, 120, 30, this);
         display.getJframe().addKeyListener(keyManager);
-        
+                
         for (int i = 0; i <= 10; i++) {
             bricks.add(new Brick(100*i+25, 25, 70, 25, this));
         }
@@ -257,6 +264,9 @@ public class Game implements Runnable {
         for (int i = 0; i <= 9; i++) {
             bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
+        
+        paddle.setMaxScore(bricks.size()*50);
+
     }
     
     public KeyManager getKeyManager() {
@@ -267,8 +277,14 @@ public class Game implements Runnable {
         keyManager.tick();
         
         if(getKeyManager().isP() == true) {
-            setPaused(isPaused() ? false : true);
+            setPaused(!isPaused());
             getKeyManager().setP(false);
+        }
+        if(getKeyManager().isSPACE() == true && !isStart()){
+           setStart(true);
+           ball.setVelX(5);
+           ball.setVelY(5);
+           getKeyManager().setSPACE(false);
         }
         
         if(getKeyManager().isG() == true)
@@ -282,19 +298,31 @@ public class Game implements Runnable {
             getKeyManager().setC(false);
         }
         
-        if (paddle.getLives() == 0) {
+        if (paddle.getLives() == 0|| paddle.getScore() == paddle.getMaxScore()) {
             setGameOver(true);
-          //  Assets.theme.stop();
+          //Assets.theme.stop();
         }
         
         if(!isGameOver() && !isPaused()){
 
             if (ball.intersecta(paddle)) {
                 ball.setVelY(-ball.getVelY());
-
                 if (ball.getX() >= paddle.getX()) {
                     ball.setVelX(-ball.getVelX());
                 }
+                paddle.setScore(paddle.getScore()+50);
+            }
+            
+            if(ball.isBottom())
+            {
+                paddle.setLives(paddle.getLives()-1);
+                setStart(false);
+                ball.setBottom(false);
+            }
+            if(!isStart())
+            {
+                ball.setX(paddle.getX());
+                ball.setY(paddle.getY()-50);
             }
     
             for (int i = 0; i < bricks.size(); i++) {
@@ -348,8 +376,9 @@ public class Game implements Runnable {
                 for (int i = 0; i < bricks.size(); i++) {
                         bricks.get(i).render(g);
                 }
-                g.setFont(new Font("Serif", Font.BOLD, 20));
+                g.setFont(new Font("Serif", Font.BOLD, 15));
                 g.drawString( "Score : " + paddle.getScore(), getWidth() - 100, getHeight());
+                g.drawString( "Lives : " + paddle.getLives(), 10, getHeight());
             }
             if(isPaused())
             {
@@ -362,8 +391,6 @@ public class Game implements Runnable {
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Game", getWidth()/2-100, getHeight()/2-100);
-                
-                g.setFont(new Font("Serif", Font.BOLD, 60));
                 g.drawString("Over", getWidth()/2+50, getHeight()/2+50);
             }
             bs.show();
@@ -481,12 +508,10 @@ public class Game implements Runnable {
                 paddle = new Paddle(120,30,this,10, pLives, pScore, pX,pY);
 
               fileIn.close();
-      
-        
     }
 
     private void restartGame() {
-      
+       setStart(false);
        paddle.setScore(0);
        paddle.setLives(3);
        paddle.setX(getWidth()/2);
@@ -505,7 +530,6 @@ public class Game implements Runnable {
         for (int i = 0; i <= 9; i++) {
             bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
-        
     }
    
 

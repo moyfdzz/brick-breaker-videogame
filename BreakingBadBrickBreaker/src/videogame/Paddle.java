@@ -15,6 +15,7 @@ public class Paddle extends Item {
     private int velocity;               // variable for the velocity of the player
     private int lives;                  // the lives of the player
     private int score;                  // the score of the player
+    private int maxScore;               // the score of the player
     
     /**
      * Constructor to initialize an object of the type Player with its attributes
@@ -32,6 +33,7 @@ public class Paddle extends Item {
         this.velocity = 10;
         this.lives = 3;
         this.score = 0;
+        this.maxScore = 0;
     }
 
     public Paddle(int width, int height, Game game, int velocity, int lives, int score, int x, int y) {
@@ -125,6 +127,14 @@ public class Paddle extends Item {
         this.score = score;
     }
 
+    public int getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMaxScore(int maxScore) {
+        this.maxScore = maxScore;
+    }
+    
     /**
      * To get the perimeter of the rectangle of the player's image
      * @return Rectangle

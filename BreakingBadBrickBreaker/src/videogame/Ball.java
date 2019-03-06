@@ -20,6 +20,7 @@ public class Ball extends Item {
     private int velX;
     private int velY;
     private int maxVel;
+    private boolean bottom;
 
     public Ball(int x, int y, int width, int height, Game game, int velX, int velY) {
         super(x, y);
@@ -29,6 +30,7 @@ public class Ball extends Item {
         this.velX = velX;
         this.velY = velY;
         maxVel = 15;
+        this.bottom = false;
     }
 
     public int getWidth() {
@@ -79,6 +81,14 @@ public class Ball extends Item {
         this.maxVel = maxVel;
     }
 
+    public boolean isBottom() {
+        return bottom;
+    }
+
+    public void setBottom(boolean bottom) {
+        this.bottom = bottom;
+    }
+    
     /**
      * To get the perimeter of the rectangle of the ball
      * @return Rectangle
@@ -112,12 +122,16 @@ public class Ball extends Item {
 
         if (getX() + getWidth() >= game.getWidth()) { // Right margin of window
             setVelX(-getVelX());
+            
         } else if (getX() <= 0) { // Left margin of window
             setVelX(-getVelX());
         }
 
         if (getY() <= 0) { // Top margin of window
             setVelY(-getVelY());
+        } 
+        if (getY() >= getHeight()) { // Top margin of window
+            setBottom(true);
         } 
 
         if (getVelX() > getMaxVel()) {
