@@ -246,7 +246,7 @@ public class Game implements Runnable {
         
         Assets.init();
         //play the theme song of the game
-       // Assets.theme.play();
+        Assets.theme.play();
         bricks = new LinkedList<Brick>();
         ball = new Ball(getWidth()/2, getHeight()-150, 50, 50, this, 0, 0);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, 120, 30, this);
@@ -305,7 +305,7 @@ public class Game implements Runnable {
         
         if (paddle.getLives() == 0|| paddle.getScore() == paddle.getMaxScore()) {
             setGameOver(true);
-          //Assets.theme.stop();
+            Assets.theme.stop();
         }
         
         if(!isGameOver() && !isPaused()){
