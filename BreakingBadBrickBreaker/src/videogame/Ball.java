@@ -82,7 +82,7 @@ public class Ball extends Item {
      * @param obj
      * @return Rectangle
      */
-    public boolean intersecta(Player obj) {
+    public boolean intersecta(Paddle obj) {
         return getPerimetro().intersects(obj.getPerimetro());
     }
     
@@ -92,7 +92,7 @@ public class Ball extends Item {
 
     @Override
     public void render(Graphics g) {
-        
+        g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.awt.Rectangle;
  *
  * @author moisesfernandez
  */
-public class Player extends Item {
+public class Paddle extends Item {
     
     private int width;                  // the width of the player
     private int height;                 // the height of the player
@@ -24,7 +24,7 @@ public class Player extends Item {
      * @param height
      * @param game
      */
-    public Player(int x, int y, int width, int height, Game game) {
+    public Paddle(int x, int y, int width, int height, Game game) {
         super(x, y);
         this.width = width;
         this.height = height;
@@ -34,7 +34,7 @@ public class Player extends Item {
         this.score = 0;
     }
 
-    public Player(int width, int height, Game game, int velocity, int lives, int score, int x, int y) {
+    public Paddle(int width, int height, Game game, int velocity, int lives, int score, int x, int y) {
         super(x, y);
         this.width = width;
         this.height = height;
@@ -171,7 +171,7 @@ public class Player extends Item {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(Assets.paddle, getX(), getY(), getWidth(), getHeight(), null);
     }
 
     @Override
