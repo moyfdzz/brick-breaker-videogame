@@ -269,14 +269,20 @@ public class Game implements Runnable {
     private void tick() throws IOException {
         keyManager.tick();
         
-        if(keyManager.P == true) {
+        if(getKeyManager().isP() == true) {
             setPaused( isPaused() ? false : true );
+            getKeyManager().setP(false);
         }
-        if(keyManager.S == true)
+        if(getKeyManager().isG() == true)
         {
             saveGame();
+            getKeyManager().setG(false);
         }
-        
+        if(getKeyManager().isC() == true)
+        {
+            loadGame();
+            getKeyManager().setC(false);
+        }
         
         if (player.getLives() == 0) {
             setGameOver(true);
@@ -335,6 +341,7 @@ public class Game implements Runnable {
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Game", getWidth()/2-100, getHeight()/2-100);
+                g.setFont(new Font("Serif", Font.BOLD, 60));
                 g.drawString("Over", getWidth()/2+50, getHeight()/2+50);
             }
             bs.show();

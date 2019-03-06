@@ -145,19 +145,17 @@ public class Player extends Item {
     @Override
     public void tick() {    
         // The player moves to the left
-        if (game.getKeyManager().LEFT) {
+        if (game.getKeyManager().isLEFT()) {
             setX(getX() - getVelocity());
         }
         
         // The player moves to the right
-        if (game.getKeyManager().RIGHT) {
+        if (game.getKeyManager().isRIGHT()) {
             setX(getX() + getVelocity());
         }
         
-        if (game.getKeyManager().SPACE) {
-        }
-        
-        if (game.getKeyManager().P) {
+        if (game.getKeyManager().isSPACE()) {
+            game.getKeyManager().setSPACE(false);
         }
 
         if (getX() + getWidth() >= game.getWidth()) { // right side of the player

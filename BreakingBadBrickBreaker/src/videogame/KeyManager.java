@@ -17,11 +17,58 @@ public class KeyManager implements KeyListener{
     public boolean LEFT;
     public boolean SPACE;
     public boolean P;
-    public boolean S;
+    public boolean G;
+    public boolean C;
     
     private boolean keys[];
+
+    public void setRIGHT(boolean RIGHT) {
+        keys[KeyEvent.VK_RIGHT] = RIGHT;
+    }
+
+    public void setLEFT(boolean LEFT) {
+        keys[KeyEvent.VK_LEFT] = LEFT;
+    }
+
+    public void setSPACE(boolean SPACE) {
+        keys[KeyEvent.VK_SPACE] =SPACE;
+    }
+
+    public void setP(boolean P) {
+        keys[KeyEvent.VK_P] = P;
+    }
+
+    public void setG(boolean G) {
+        keys[KeyEvent.VK_G] = G;
+    }
+
+    public void setC(boolean C) {
+        keys[KeyEvent.VK_C] = C;
+    }
     
-    public KeyManager() {
+    public boolean isRIGHT() {
+        return keys[KeyEvent.VK_RIGHT];
+    }
+
+    public boolean isLEFT() {
+        return keys[KeyEvent.VK_LEFT];
+    }
+
+    public boolean isSPACE() {
+        return keys[KeyEvent.VK_SPACE];
+    }
+
+    public boolean isP() {
+        return keys[KeyEvent.VK_P];
+    }
+
+    public boolean isG() {
+        return keys[KeyEvent.VK_G];
+    }
+    public boolean isC() {
+        return keys[KeyEvent.VK_C];
+    }
+KeyManager() {
         keys = new boolean[256];
     }
     
@@ -31,12 +78,16 @@ public class KeyManager implements KeyListener{
     
     @Override
     public void keyPressed(KeyEvent e) {
-        keys[e.getKeyCode()] = true;
+        if(keys[e.getKeyCode()] == RIGHT ||keys[e.getKeyCode()] == LEFT )
+            keys[e.getKeyCode()] = true;
     }
     
     @Override
     public void keyReleased(KeyEvent e) {
-        keys[e.getKeyCode()] = false;
+        if(keys[e.getKeyCode()] == RIGHT ||keys[e.getKeyCode()] == LEFT)
+            keys[e.getKeyCode()] = false;
+        
+        else keys[e.getKeyCode()] = true;
     }
     
     public void tick() {
@@ -44,6 +95,7 @@ public class KeyManager implements KeyListener{
         LEFT = keys[KeyEvent.VK_LEFT];
         SPACE = keys[KeyEvent.VK_SPACE];
         P = keys[KeyEvent.VK_P];
-        S = keys[KeyEvent.VK_S];
+        G = keys[KeyEvent.VK_G];
+        C = keys[KeyEvent.VK_C];
     }
 }
