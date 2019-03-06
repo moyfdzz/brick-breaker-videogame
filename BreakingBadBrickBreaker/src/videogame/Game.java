@@ -270,6 +270,7 @@ public class Game implements Runnable {
             setPaused(isPaused() ? false : true);
             getKeyManager().setP(false);
         }
+        
         if(getKeyManager().isG() == true)
         {
             saveGame();
@@ -465,7 +466,20 @@ public class Game implements Runnable {
                          
                     bricks.add(new Brick(brickX,brickY,70,25,brickLives, this));
               }
-              
+              int bX,bY,bVelX, bVelY;
+                bX = Integer.parseInt(fileIn.readLine());
+                bY = Integer.parseInt(fileIn.readLine());
+                bVelX = Integer.parseInt(fileIn.readLine());
+                bVelY = Integer.parseInt(fileIn.readLine());
+                ball = new Ball(bX,bY,50,50,this,bVelX,bVelY);
+                
+              int pX,pY,pScore, pLives;
+                pX = Integer.parseInt(fileIn.readLine());
+                pY = Integer.parseInt(fileIn.readLine());
+                pLives = Integer.parseInt(fileIn.readLine());
+                pScore = Integer.parseInt(fileIn.readLine());
+                paddle = new Paddle(120,30,this,10, pLives, pScore, pX,pY);
+
               fileIn.close();
       
         
