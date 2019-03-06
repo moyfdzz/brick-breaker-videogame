@@ -283,7 +283,7 @@ public class Game implements Runnable {
         if(getKeyManager().isSPACE() == true && !isStart()){
            setStart(true);
            ball.setVelX(5);
-           ball.setVelY(5);
+           ball.setVelY(-5);
            getKeyManager().setSPACE(false);
         }
         
@@ -306,11 +306,7 @@ public class Game implements Runnable {
         if(!isGameOver() && !isPaused()){
 
             if (ball.intersecta(paddle)) {
-                ball.setVelY(-ball.getVelY());
-                if (ball.getX() >= paddle.getX()) {
-                    ball.setVelX(-ball.getVelX());
-                }
-                
+                ball.setVelY(-ball.getVelY());                
             }
             
             if(ball.isBottom())
