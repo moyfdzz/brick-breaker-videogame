@@ -40,8 +40,9 @@ public class Game implements Runnable,Constants {
     private Ball ball;
     private boolean gameOver;           // to determine if the game is over
     private boolean paused;             // to determine if the game is paused
-    private boolean start;             // to determine if the game is paused
-    private String lastSave;    //Nombre del archivo.
+    private boolean start;              // to determine if the game is paused
+    private String lastSave;            // to determine the name of the file
+    private int bricksAmount;                 // to determine the bricks remaining
         
         
     /**
@@ -249,7 +250,7 @@ public class Game implements Runnable,Constants {
         Assets.theme.play();
         //initialize the objects of the game
         bricks = new LinkedList<Brick>();
-        ball = new Ball(getWidth()/2, getHeight()-150, 25, 25, this, 0, 0);
+        ball = new Ball(getWidth()/2, getHeight()-150, BALL_DIMENSION, BALL_DIMENSION, this, 0, 0);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, PADDLE_HEIGHT, PADDLE_WIDTH, this);
         display.getJframe().addKeyListener(keyManager);
                 
@@ -266,7 +267,7 @@ public class Game implements Runnable,Constants {
         for (int i = 0; i <= 9; i++) {
             bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX2, BRICK_STARTY4, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
-
+        bricksAmount = bricks.size();
     }
     /**
      * To return the keyboard manager
@@ -376,6 +377,7 @@ public class Game implements Runnable,Constants {
                     //takes 1 live from the brick and changes the skin color
                     bricks.get(i).setLives(bricks.get(i).getLives() - 1);
                     paddle.setScore(paddle.getScore()+50);
+                    ball.setCollisions(ball.getCollisions()+1);
                 }
 
                 if(bricks.get(i).getLives() == 0) {
@@ -567,7 +569,8 @@ public class Game implements Runnable,Constants {
     }
 
     private void restartGame() {
-       
+        
+       ball.setCollisions(0);
        ball.setBottom(false);
        setStart(false);
        setPaused(false);
