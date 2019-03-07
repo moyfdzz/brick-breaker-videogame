@@ -256,7 +256,7 @@ public class Game implements Runnable,Constants {
         //initialize the objects of the game
         bricks = new LinkedList<Brick>();
         ball = new Ball(getWidth()/2, getHeight()-150, BALL_DIMENSION, BALL_DIMENSION, this, 0, 0);
-        paddle = new Paddle(getWidth()/2, getHeight() - 100, PADDLE_HEIGHT, PADDLE_WIDTH, this);
+        paddle = new Paddle(getWidth()/2, getHeight() - 100,PADDLE_WIDTH, PADDLE_HEIGHT,  this);
         display.getJframe().addKeyListener(keyManager);
 
         power = new PowerUp(0,0,0,0,this,0,0);
@@ -343,72 +343,83 @@ public class Game implements Runnable,Constants {
             
             //checkes the collision of every brick
             for (int i = 0; i < bricks.size(); i++) {
+                
                 if (ball.intersecta(bricks.get(i))) {
                     //sets the velocity to the other side
                     ball.setVelY(-ball.getVelY());
                     //takes 1 live from the brick and changes the skin color
                     bricks.get(i).setLives(bricks.get(i).getLives() - 1);
-                    
+                    //sets the score to the new score
                     paddle.setScore(paddle.getScore()+50);
                     
                 }
-
+                // if the bricks is 0 
                 if(bricks.get(i).getLives() == 0) {
                     bricks.remove(bricks.get(i));
+                    //generates the possibility of a powerup
                     powerChance = (int) (Math.random() * 2);
                 }
                 
                 else {
+                    //ticks the bricks
                     bricks.get(i).tick();
                 }
             }
-
+            // creates a powerup if there is a chance 
             if(!power.isCreated() && powerChance == 1)
             {
+                //generates a random number between 1 and 3
                 int select = (int) (Math.random() * 4) + 1;
+
                 switch(select)
                 {
+                    //creates powerup 1
                     case 1:
                     power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,1);
-
-                    break;
                     
+                    break;
+                    //creates powerup 2
                     case 2:
                     power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,2);
                         break;
-                    
+                    //creates powerup 3
                     case 3:
                     power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,3);    
                         break;
                 }  
+                    //sets the creator
                     power.setCreated(true);
                     powerChance = 0;
             }
-            
+
+            // if powerup intersects changes the status
+
             if(power.intersecta(paddle))
             {
                 switch(power.getPower())
                 {
+                    //adds +10 to velocity
                     case 1:
                     paddle.setVelocity(paddle.getVelocity()+10);
                     break;
-
+                    // adds a life to the player
                     case 2:
                     paddle.setLives(paddle.getLives()+1);
                     break;
-
+                    //decreases velocity
                     case 3:
                     paddle.setVelocity(paddle.getVelocity()-5);
                     break;
                 }
+                //resets the value of power
                 power.reset();
             }
-            
+            //ticks the objects
             ball.tick();
             paddle.tick();
             power.tick();
         }
-
+        // restarts the game
         if(isGameOver() && getKeyManager().isR() == true) {
             restartGame();
             getKeyManager().setR(false);   
@@ -451,6 +462,7 @@ public class Game implements Runnable,Constants {
                 }
             }
             
+            //shows if the game is paused and the current score
             if(isPaused() && !isGameOver())
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
@@ -458,6 +470,7 @@ public class Game implements Runnable,Constants {
                 g.setFont(new Font("Serif", Font.BOLD, 60));
                 g.drawString("Current Score: " + paddle.getScore(), getWidth()/2-200, getHeight()/2+200);
             }
+            //shows that the game is over and the instructions to restart the game
             if(isGameOver())
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
@@ -480,7 +493,7 @@ public class Game implements Runnable,Constants {
             thread.start();
         }
     }
-    
+    //to stop the game
     public synchronized void stop() {
         if(running) {
             running = false;
@@ -517,93 +530,129 @@ public class Game implements Runnable,Constants {
         }
         stop();
     }
-
+    /**
+     * To save the game into the text
+     */
     private void saveGame() throws IOException {
-                                                          
+        // creates a new file or rewrites if already created                                          
         PrintWriter fileOut = new PrintWriter(new FileWriter(lastSave));
-        
+
+        // writes the amount of bricks to the file
         fileOut.println(bricks.size());
-        
+
+        // writes the properties of each of the bricks to the file
         for (int i = 0; i < bricks.size(); i++) {
             fileOut.println(bricks.get(i).getX());
             fileOut.println(bricks.get(i).getY());
             fileOut.println(bricks.get(i).getLives());
         }
-        
+
+        // writes the properties of the ball
         fileOut.println(ball.getX());
         fileOut.println(ball.getY());
         fileOut.println(ball.getVelX());
         fileOut.println(ball.getVelY());
-        
+
+        // writes the properties of the paddle
         fileOut.println(paddle.getX());
         fileOut.println(paddle.getY());
         fileOut.println(paddle.getLives());
         fileOut.println(paddle.getScore());
-       
+
+        //closes the edited file and saves it
         fileOut.close();
     }
     
-    
+    /**
+     * To load the game from the file
+     */
     private void loadGame() throws IOException
     {
+        //sets the start position of the ball to false
         setStart(false);
+
+        //clears the linked list in order to add the bricks
         bricks.clear();
+        //creates the buffer of the file to be read
         BufferedReader fileIn;
               try {
+                  // assigns the file to filein
                       fileIn = new BufferedReader(new FileReader(lastSave));
+
               } catch (FileNotFoundException e){
-                      File puntos = new File(lastSave);
-                      PrintWriter fileOut = new PrintWriter(puntos);
-                      fileOut.println("100,demo");
+                    //if the exception is cateched the recover file writed not saved
+                      File recover = new File(lastSave);
+
+                      PrintWriter fileOut = new PrintWriter(recover);
+
+                      fileOut.println("File not saved");
+                    //file closes
                       fileOut.close();
+                    //tries to create a new file to be read
                       fileIn = new BufferedReader(new FileReader(lastSave));
               }
+              //reads the first line which is the amount of bricks to be read
               String dato = fileIn.readLine();
               int num = Integer.parseInt(dato);
+              //create variables of the bricks
               int brickX, brickY,brickLives;
-              
+              //for a certain amount the buffer reads the properties
               for(int i = 0; i < num ; i++)   
               {
                          brickX = Integer.parseInt(fileIn.readLine());
                          brickY = Integer.parseInt(fileIn.readLine());
                          brickLives = Integer.parseInt(fileIn.readLine());
-                         
+                    // adds the new bricks to the linked list
                     bricks.add(new Brick(brickX,brickY,70,25,brickLives, this));
               }
-              
+              //create variables of the ball
               int bX,bY,bVelX, bVelY;
+              //reads the variables of the ball
                 bX = Integer.parseInt(fileIn.readLine());
                 bY = Integer.parseInt(fileIn.readLine());
                 bVelX = Integer.parseInt(fileIn.readLine());
                 bVelY = Integer.parseInt(fileIn.readLine());
-                ball = new Ball(bX,bY,50,50,this,bVelX,bVelY);
-                
+              //creates a new ball woth the properties above
+                ball = new Ball(bX,bY,BALL_DIMENSION,BALL_DIMENSION,this,bVelX,bVelY);
+            
+            //create variables of the paddle
               int pX,pY,pScore, pLives;
+
+              //reads the variables of the paddle
                 pX = Integer.parseInt(fileIn.readLine());
                 pY = Integer.parseInt(fileIn.readLine());
                 pLives = Integer.parseInt(fileIn.readLine());
                 pScore = Integer.parseInt(fileIn.readLine());
-                paddle = new Paddle(120,30,this,10, pLives, pScore, pX,pY);
+
+              //creates a new paddle
+                paddle = new Paddle(PADDLE_WIDTH,PADDLE_HEIGHT,this,10, pLives, pScore, pX,pY);
+
+            //closes the file
               fileIn.close();
     }
 
+    //restarts the game
     private void restartGame() {
-        
-       ball.setCollisions(0);
-       ball.setBottom(false);
+    
+       //rests the conditions of the game
        setStart(false);
        setPaused(false);
        setGameOver(false);
-       
+
+    //rests the conditions of the paddle
        paddle.setScore(0);
        paddle.setLives(3);
        paddle.setX(getWidth()/2);
        paddle.setY(getHeight() - 100);
        
+       //rests the conditions of the ball
+       ball.setBottom(false);
        ball.setX(this.getWidth()/2);
        ball.setY(this.getHeight()/2-50);
        
-       
+       //resets all the board to new values of the bricks linked list
+        bricks.clear();
+
         for (int i = 0; i <= 10; i++) {
             bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX1, BRICK_STARTY1, BRICK_HEIGHT, BRICK_WIDTH, this));
         }

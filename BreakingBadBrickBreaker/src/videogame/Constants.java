@@ -6,8 +6,8 @@ package videogame;
  * @author ErickFrank
  */
 public interface Constants {
-    public static final int PADDLE_HEIGHT = 120;
-    public static final int PADDLE_WIDTH = 65;
+    public static final int PADDLE_HEIGHT = 65;
+    public static final int PADDLE_WIDTH = 120;
     public static final int BALL_DIMENSION = 25;
     public static final int POWERUP1_HEIGHT = 60;
     public static final int POWERUP1_WIDTH = 60;
