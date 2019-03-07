@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author moisesfernandez
  */
-public class Game implements Runnable {
+public class Game implements Runnable,Constants {
 
     private BufferStrategy bs;          // to have several buffers when	displaying
     private Graphics g;                 // to paint objects
@@ -243,69 +243,78 @@ public class Game implements Runnable {
      */
     private void init() {
         display = new Display(title, width, height);
-        
+        //initialize the assets
         Assets.init();
         //play the theme song of the game
         Assets.theme.play();
+        //initialize the objects of the game
         bricks = new LinkedList<Brick>();
         ball = new Ball(getWidth()/2, getHeight()-150, 25, 25, this, 0, 0);
-        paddle = new Paddle(getWidth()/2, getHeight() - 100, 120, 30, this);
+        paddle = new Paddle(getWidth()/2, getHeight() - 100, PADDLE_HEIGHT, PADDLE_WIDTH, this);
         display.getJframe().addKeyListener(keyManager);
                 
+        //add the bricks to the linked lists
         for (int i = 0; i <= 10; i++) {
-            bricks.add(new Brick(100*i+25, 25, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX1, BRICK_STARTY1, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         for (int i = 0; i <= 9; i++) {
-            bricks.add(new Brick(100*i+75, 75, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX2, BRICK_STARTY2, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         for (int i = 0; i <= 10; i++) {
-            bricks.add(new Brick(100*i+25, 125, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX1, BRICK_STARTY3, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         for (int i = 0; i <= 9; i++) {
-            bricks.add(new Brick(100*i+75, 175, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX2, BRICK_STARTY4, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
 
     }
-    
+    /**
+     * To return the keyboard manager
+     * @return keyManager
+     */
     public KeyManager getKeyManager() {
         return keyManager;
     }
     
+    // ticks the game
     private void tick() throws IOException {
-        keyManager.tick();
         
+        keyManager.tick();
+        // sets the pause to true
         if(getKeyManager().isP() == true) {
             setPaused(!isPaused());
             getKeyManager().setP(false);
         }
         
+        // starts the movement of the ball
         if(getKeyManager().isSPACE() == true && !isStart()){
            getKeyManager().setSPACE(false);
            setStart(true);
            int randomVelX = (int) (Math.random() * 20) - 10;
-           
            ball.setVelX(randomVelX);
            ball.setVelY(-10);
         }
-        
+        //saves the game
         if(getKeyManager().isG() == true)
         {
             getKeyManager().setG(false);
             saveGame();
         }
+        //loads the game
         if(getKeyManager().isC() == true)
         {
             getKeyManager().setC(false);
             loadGame();
         }
-        
+        //conditions that ends the game
         if (paddle.getLives() == 0 || bricks.size() == 0) {
             setGameOver(true);
             Assets.theme.stop();
         }
-        
+        //while the the game is neither over nor paused
         if(!isGameOver() && !isPaused()){
-
+            
+            //checks the collision with the paddle
             if (ball.intersecta(paddle)) {
                 int xBall = ball.getX();
                 int yBall = ball.getY();
@@ -342,7 +351,7 @@ public class Game implements Runnable {
                 */
 
             }
-            
+            // checks if the ball reaches the bottom and restarts
             if(ball.isBottom())
             {
                 paddle.setLives(paddle.getLives()-1);
@@ -350,6 +359,7 @@ public class Game implements Runnable {
                 ball.setBottom(false);
     
             }
+            // moves the ball with respect to the paddle if not started
             if(!isStart())
             {
                 ball.setVelX(0);
@@ -357,10 +367,13 @@ public class Game implements Runnable {
                 ball.setX(paddle.getX() + paddle.getWidth() / 3 + 5);
                 ball.setY(paddle.getY() - ball.getHeight() * 2);
             }
-    
+            
+            //checkes the collision of every brick
             for (int i = 0; i < bricks.size(); i++) {
                 if (ball.intersecta(bricks.get(i))) {
+                    //sets the velocity to the other side
                     ball.setVelY(-ball.getVelY());
+                    //takes 1 live from the brick and changes the skin color
                     bricks.get(i).setLives(bricks.get(i).getLives() - 1);
                     paddle.setScore(paddle.getScore()+50);
                 }
@@ -397,11 +410,10 @@ public class Game implements Runnable {
         } else {
             
             g = bs.getDrawGraphics();
+            
             g.drawImage(Assets.background, 0, 0, getWidth(), getHeight(), null);
             
             g.setColor(Color.WHITE);
-            
-            
             if(!isGameOver()) {
                 
                 paddle.render(g);
@@ -410,9 +422,14 @@ public class Game implements Runnable {
                         bricks.get(i).render(g);
                 }
                 g.setFont(new Font("Serif", Font.BOLD, 15));
+                //to show the score of the player
                 g.drawString( "Score : " + paddle.getScore(), getWidth() - 100, getHeight());
-                g.drawString( "Lives : " + paddle.getLives(), 10, getHeight());
+                //to show the lives of the player
+                for (int i = 1; i <= paddle.getLives(); i++) {
+                    g.drawImage(Assets.lives, LIVES_DIFFX * i - LIVES_DIFFX+5, getHeight()-LIVES_DIFFX, LIVES_WIDTH, LIVES_HEIGHT, null);
+                }
             }
+            
             if(isPaused() && !isGameOver())
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
@@ -425,13 +442,15 @@ public class Game implements Runnable {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Game", getWidth()/2-100, getHeight()/2-100);
                 g.drawString("Over", getWidth()/2+50, getHeight()/2+50);
+                g.setFont(new Font("Serif", Font.BOLD, 60));
+                g.drawString("Final Score: " + paddle.getScore(), getWidth()/2-200, getHeight()/2+200);
             }
             bs.show();
             g.dispose();
         }
         
     }
-    
+    // to start the game
     public synchronized void start() {
         if(!running) {
             running = true;
@@ -563,17 +582,17 @@ public class Game implements Runnable {
        ball.setY(this.getHeight()/2-50);
        
        
-       for (int i = 0; i <= 10; i++) {
-            bricks.add(new Brick(100*i+25, 25, 70, 25, this));
+        for (int i = 0; i <= 10; i++) {
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX1, BRICK_STARTY1, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         for (int i = 0; i <= 9; i++) {
-            bricks.add(new Brick(100*i+75, 75, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX2, BRICK_STARTY2, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         for (int i = 0; i <= 10; i++) {
-            bricks.add(new Brick(100*i+25, 125, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX1, BRICK_STARTY3, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         for (int i = 0; i <= 9; i++) {
-            bricks.add(new Brick(100*i+75, 175, 70, 25, this));
+            bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX2, BRICK_STARTY4, BRICK_HEIGHT, BRICK_WIDTH, this));
         }
         
     }

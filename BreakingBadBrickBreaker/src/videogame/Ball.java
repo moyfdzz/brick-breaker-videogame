@@ -21,6 +21,7 @@ public class Ball extends Item {
     private int velY;
     private int maxVel;
     private boolean bottom;
+    private int collisions;
 
     public Ball(int x, int y, int width, int height, Game game, int velX, int velY) {
         super(x, y);
@@ -31,62 +32,105 @@ public class Ball extends Item {
         this.velY = velY;
         maxVel = 15;
         this.bottom = false;
+        this.collisions = 0;
     }
-
+    /**
+     * to get the width of the ball
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
-
+    /**
+     * to set the width of the ball
+     * @param width 
+     */
     public void setWidth(int width) {
         this.width = width;
     }
-
+    /**
+     * to get the height of the ball
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
-
+    /**
+     * to set the height of the ball
+     * @param height 
+     */
     public void setHeight(int height) {
         this.height = height;
     }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
+    /**
+     * to get the velX of the ball
+     * @return velX
+     */
     public int getVelX() {
         return velX;
     }
-
+    /**
+     * to set the velX of the ball
+     * @param velX 
+     */
     public void setVelX(int velX) {
         this.velX = velX;
     }
-
+    /**
+     * to get the velY of the ball
+     * @return velY
+     */
     public int getVelY() {
         return velY;
     }
-
+    /**
+     * to set the velY of the ball
+     * @param velY 
+     */
     public void setVelY(int velY) {
         this.velY = velY;
     }
-
+    /**
+     * to get the maxVel of the ball
+     * @return 
+     */
     public int getMaxVel() {
         return maxVel;
     }
-
+    /**
+     * to set the maxVel of the ball
+     * @param maxVel 
+     */
     public void setMaxVel(int maxVel) {
         this.maxVel = maxVel;
     }
-
+    /**
+     * to get the status of bottom of the ball
+     * @return 
+     */
     public boolean isBottom() {
         return bottom;
     }
-
+    /**
+     * to set the status of bottom of the ball
+     * @param bottom 
+     */
     public void setBottom(boolean bottom) {
         this.bottom = bottom;
+    }
+    /**
+     * to get the collisions of the ball
+     * @return collisions
+     */
+    public int getCollisions() {
+        return collisions;
+    }
+    /**
+     * to set the collision of the ball
+     * @param collisions 
+     */
+    public void setCollisions(int collisions) {
+        this.collisions = collisions;
     }
     
     /**
@@ -117,8 +161,7 @@ public class Ball extends Item {
     
     @Override
     public void tick() {
-        setY(getY() + getVelY());  
-        setX(getX() + getVelX()); 
+        
 
         if (getX() + getWidth() >= game.getWidth()) { // Right margin of window
             setVelX(-getVelX());
@@ -141,16 +184,19 @@ public class Ball extends Item {
         if (getVelY() > getMaxVel()) {
             setVelY(getMaxVel());
         }
+        
+        //sets the movement
+        setY(getY() + getVelY());  
+        setX(getX() + getVelX()); 
     }
-
+    
+    /**
+     * renders the ball
+     * @param g 
+     */
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);
-    }
-
-    @Override
-    public String toString() {
-        return x + "," + y + "," + width + "," + height + "," + velX + "," + velY;
     }
     
 }

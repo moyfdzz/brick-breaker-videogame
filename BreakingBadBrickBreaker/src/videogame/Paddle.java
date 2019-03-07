@@ -35,7 +35,17 @@ public class Paddle extends Item {
         this.score = 0;
         this.maxScore = 0;
     }
-
+    /**
+     * constructor of the paddle with all the parameters
+     * @param width
+     * @param height
+     * @param game
+     * @param velocity
+     * @param lives
+     * @param score
+     * @param x
+     * @param y 
+     */
     public Paddle(int width, int height, Game game, int velocity, int lives, int score, int x, int y) {
         super(x, y);
         this.width = width;
@@ -126,11 +136,17 @@ public class Paddle extends Item {
     public void setScore(int score) {
         this.score = score;
     }
-
+    /**
+     * to get the MaxScore
+     * @return maxScore
+     */
     public int getMaxScore() {
         return maxScore;
     }
-
+    /**
+     * to set the maxScore
+     * @param maxScore 
+     */
     public void setMaxScore(int maxScore) {
         this.maxScore = maxScore;
     }
@@ -182,11 +198,6 @@ public class Paddle extends Item {
     @Override
     public void render(Graphics g) {
         g.drawImage(Assets.paddle, getX(), getY(), getWidth(), getHeight(), null);
-    }
-
-    @Override
-    public String toString() {
-        return x + "," + y + "," + width + "," + height  + "," + velocity + "," + lives + "," + score;
     }
 
 }
