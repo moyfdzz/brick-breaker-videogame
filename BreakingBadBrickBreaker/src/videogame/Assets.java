@@ -22,7 +22,7 @@ public class Assets {
     public static BufferedImage ball;               //to save the image of the ball
     public static BufferedImage UP1;                //to save the image of the POWERUP
     public static BufferedImage lightning;          //to save the image of the POWERUP
-    public static BufferedImage invisible;          //to save the image of the DEBUFFER
+    public static BufferedImage slow;          //to save the image of the DEBUFFER
     public static SoundClip death;                  //to save the image of the background
     public static SoundClip theme;                  //to save the image of the background
     public static BufferedImage brickSkins[];       //to save the image of the background
@@ -37,7 +37,7 @@ public class Assets {
         gameOver = ImageLoader.loadImage("/images/game_over.jpg");
         lives = ImageLoader.loadImage("/images/lives.png");
         lightning = ImageLoader.loadImage("/images/lightning.png");
-        invisible = ImageLoader.loadImage("/images/invisible.png");
+        slow = ImageLoader.loadImage("/images/slow.png");
         death = new SoundClip("/sounds/death.wav"); 
         theme = new SoundClip("/sounds/theme_song.wav");
         brickSkins = new BufferedImage[3];

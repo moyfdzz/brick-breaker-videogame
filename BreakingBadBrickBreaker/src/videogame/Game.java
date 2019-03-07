@@ -45,7 +45,7 @@ public class Game implements Runnable,Constants {
     private String lastSave;            // to determine the name of the file
     private int bricksAmount;           // to determine the bricks remaining
     private PowerUp power;              // to determine the powerup 
-    private boolean powerChance;
+    private int powerChance;
         
         
     /**
@@ -64,7 +64,7 @@ public class Game implements Runnable,Constants {
         this.paused = false;
         this.start = false;
         this.lastSave = "lastSave.txt";
-        this.powerChance = false;
+        this.powerChance = 0;
         
     }
 
@@ -323,48 +323,66 @@ public class Game implements Runnable,Constants {
             
             //checks the collision with the paddle
             if (ball.intersecta(paddle)) {
-                int xBall = ball.getX();
-                int yBall = ball.getY();
-                int wBall = ball.getWidth();
-                int hBall = ball.getHeight();
-                int xPaddle = paddle.getX();
-                int yPaddle = paddle.getY();
-                int wPaddle = paddle.getWidth();
-                int hPaddle = paddle.getHeight();
-                
-                if (yBall >= yPaddle - hPaddle * 2) {
-                    if (xBall >= xPaddle + wPaddle / 5 && xBall <= xPaddle + (4 * wPaddle / 5)) {
-                        ball.setVelY(-ball.getVelY());
-                    }
-                    else {
-                        ball.setVelY(-ball.getVelY());
-                        ball.setVelX(-ball.getVelX());
-                    }
-                }                
-                
-                /*
-                if (yBall >= yPaddle - hPaddle * 2) {
-                    ball.setVelY(-ball.getVelY());
-                }
-                
-                */
-                
-                /*
-                
-                if (ball.getX() >= paddle.getX() + 50) {
-                    ball.setVelX(-ball.getVelX());
-                    ball.setVelY(-ball.getVelY());
-                }
-                */
+                ball.setVelY(-ball.getVelY());
             }
-            if(!power.isCreated())
+            // checks if the ball reaches the bottom and restarts
+            if(ball.isBottom())
             {
-                if(bricksAmount  == bricks.size())
-                {
-                    power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,1);
-                    power.setCreated(true);
+                paddle.setLives(paddle.getLives()-1);
+                setStart(false);
+                ball.setBottom(false);
+            }
+            // moves the ball with respect to the paddle if not started
+            if(!isStart())
+            {
+                ball.setVelX(0);
+                ball.setVelY(0);
+                ball.setX(paddle.getX() + paddle.getWidth() / 3 + 5);
+                ball.setY(paddle.getY() - ball.getHeight() * 2);
+            }
+            
+            //checkes the collision of every brick
+            for (int i = 0; i < bricks.size(); i++) {
+                if (ball.intersecta(bricks.get(i))) {
+                    //sets the velocity to the other side
+                    ball.setVelY(-ball.getVelY());
+                    //takes 1 live from the brick and changes the skin color
+                    bricks.get(i).setLives(bricks.get(i).getLives() - 1);
+                    
+                    paddle.setScore(paddle.getScore()+50);
+                    
                 }
 
+                if(bricks.get(i).getLives() == 0) {
+                    bricks.remove(bricks.get(i));
+                    powerChance = (int) (Math.random() * 2);
+                }
+                
+                else {
+                    bricks.get(i).tick();
+                }
+            }
+
+            if(!power.isCreated() && powerChance == 1)
+            {
+                int select = (int) (Math.random() * 4) + 1;
+                switch(select)
+                {
+                    case 1:
+                    power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,1);
+
+                    break;
+                    
+                    case 2:
+                    power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,2);
+                        break;
+                    
+                    case 3:
+                    power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,3);    
+                        break;
+                }  
+                    power.setCreated(true);
+                    powerChance = 0;
             }
             
             if(power.intersecta(paddle))
@@ -385,44 +403,7 @@ public class Game implements Runnable,Constants {
                 }
                 power.reset();
             }
-            // checks if the ball reaches the bottom and restarts
-            if(ball.isBottom())
-            {
-                paddle.setLives(paddle.getLives()-1);
-                setStart(false);
-                ball.setBottom(false);
-    
-            }
-            // moves the ball with respect to the paddle if not started
-            if(!isStart())
-            {
-                ball.setVelX(0);
-                ball.setVelY(0);
-                ball.setX(paddle.getX() + paddle.getWidth() / 3 + 5);
-                ball.setY(paddle.getY() - ball.getHeight() * 2);
-            }
             
-            //checkes the collision of every brick
-            for (int i = 0; i < bricks.size(); i++) {
-                
-                if (ball.intersecta(bricks.get(i))) {
-                    //sets the velocity to the other side
-                    ball.setVelY(-ball.getVelY());
-                    //takes 1 live from the brick and changes the skin color
-                    bricks.get(i).setLives(bricks.get(i).getLives() - 1);
-                    paddle.setScore(paddle.getScore()+50);
-                }
-
-                if(bricks.get(i).getLives() == 0) {
-                    bricks.remove(bricks.get(i));
-                    
-                }
-                
-                else {
-                    bricks.get(i).tick();
-                }
-            }
-
             ball.tick();
             paddle.tick();
             power.tick();

@@ -218,7 +218,7 @@ public class PowerUp extends Item {
             g.drawImage(Assets.UP1, getX(), getY(), getWidth(), getHeight(), null);
                 break;
             case 3: 
-            g.drawImage(Assets.invisible, getX(), getY(), getWidth(), getHeight(), null);
+            g.drawImage(Assets.slow, getX(), getY(), getWidth(), getHeight(), null);
                 break;
         }
         
