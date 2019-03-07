@@ -264,13 +264,6 @@ public class Game implements Runnable {
         for (int i = 0; i <= 9; i++) {
             bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
-        
-         for (int i = 0; i < bricks.size(); i++) {
-             for(int j = 0; j < bricks.get(i).getLives();j++)
-             {
-               paddle.setMaxScore(paddle.getMaxScore()+50);
-             }
-         }
 
     }
     
@@ -285,28 +278,28 @@ public class Game implements Runnable {
             setPaused(!isPaused());
             getKeyManager().setP(false);
         }
+        
         if(getKeyManager().isSPACE() == true && !isStart()){
+           getKeyManager().setSPACE(false);
            setStart(true);
-           
            int randomVelX = (int) (Math.random() * 20) - 10;
            
            ball.setVelX(randomVelX);
            ball.setVelY(-10);
-           getKeyManager().setSPACE(false);
         }
         
         if(getKeyManager().isG() == true)
         {
-            saveGame();
             getKeyManager().setG(false);
+            saveGame();
         }
         if(getKeyManager().isC() == true)
         {
-            loadGame();
             getKeyManager().setC(false);
+            loadGame();
         }
         
-        if (paddle.getLives() == 0|| paddle.getScore() == paddle.getMaxScore()) {
+        if (paddle.getLives() == 0 || bricks.size() == 0) {
             setGameOver(true);
             Assets.theme.stop();
         }
@@ -355,6 +348,7 @@ public class Game implements Runnable {
                 paddle.setLives(paddle.getLives()-1);
                 setStart(false);
                 ball.setBottom(false);
+    
             }
             if(!isStart())
             {
@@ -384,7 +378,6 @@ public class Game implements Runnable {
         }
 
         if(isGameOver() && getKeyManager().isR() == true) {
-            setGameOver(false);
             restartGame();
             getKeyManager().setR(false);   
         }
@@ -420,7 +413,7 @@ public class Game implements Runnable {
                 g.drawString( "Score : " + paddle.getScore(), getWidth() - 100, getHeight());
                 g.drawString( "Lives : " + paddle.getLives(), 10, getHeight());
             }
-            if(isPaused())
+            if(isPaused() && !isGameOver())
             {
                 g.setFont(new Font("Serif", Font.BOLD, 120));
                 g.drawString("Paused", getWidth()/2-200, getHeight()/2);
@@ -487,12 +480,15 @@ public class Game implements Runnable {
     private void saveGame() throws IOException {
                                                           
         PrintWriter fileOut = new PrintWriter(new FileWriter(lastSave));
+        
         fileOut.println(bricks.size());
+        
         for (int i = 0; i < bricks.size(); i++) {
             fileOut.println(bricks.get(i).getX());
             fileOut.println(bricks.get(i).getY());
             fileOut.println(bricks.get(i).getLives());
         }
+        
         fileOut.println(ball.getX());
         fileOut.println(ball.getY());
         fileOut.println(ball.getVelX());
@@ -534,6 +530,7 @@ public class Game implements Runnable {
                          
                     bricks.add(new Brick(brickX,brickY,70,25,brickLives, this));
               }
+              
               int bX,bY,bVelX, bVelY;
                 bX = Integer.parseInt(fileIn.readLine());
                 bY = Integer.parseInt(fileIn.readLine());
@@ -547,19 +544,25 @@ public class Game implements Runnable {
                 pLives = Integer.parseInt(fileIn.readLine());
                 pScore = Integer.parseInt(fileIn.readLine());
                 paddle = new Paddle(120,30,this,10, pLives, pScore, pX,pY);
-
               fileIn.close();
     }
 
     private void restartGame() {
+       
        ball.setBottom(false);
        setStart(false);
+       setPaused(false);
+       setGameOver(false);
+       
        paddle.setScore(0);
        paddle.setLives(3);
        paddle.setX(getWidth()/2);
        paddle.setY(getHeight() - 100);
+       
        ball.setX(this.getWidth()/2);
        ball.setY(this.getHeight()/2-50);
+       
+       
        for (int i = 0; i <= 10; i++) {
             bricks.add(new Brick(100*i+25, 25, 70, 25, this));
         }
@@ -572,6 +575,7 @@ public class Game implements Runnable {
         for (int i = 0; i <= 9; i++) {
             bricks.add(new Brick(100*i+75, 175, 70, 25, this));
         }
+        
     }
    
 
