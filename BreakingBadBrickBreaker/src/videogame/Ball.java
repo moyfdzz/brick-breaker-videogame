@@ -23,6 +23,16 @@ public class Ball extends Item {
     private boolean bottom;
     private int collisions;
 
+    /**
+     * Constructor to initialize an object of the type Ball with its attributes
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     * @param velX
+     * @param velY
+     */
     public Ball(int x, int y, int width, int height, Game game, int velX, int velY) {
         super(x, y);
         this.width = width;

@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +43,9 @@ public class Game implements Runnable,Constants {
     private boolean paused;             // to determine if the game is paused
     private boolean start;              // to determine if the game is paused
     private String lastSave;            // to determine the name of the file
-    private int bricksAmount;                 // to determine the bricks remaining
+    private int bricksAmount;           // to determine the bricks remaining
+    private PowerUp power;              // to determine the powerup 
+    private boolean powerChance;
         
         
     /**
@@ -61,6 +64,8 @@ public class Game implements Runnable,Constants {
         this.paused = false;
         this.start = false;
         this.lastSave = "lastSave.txt";
+        this.powerChance = false;
+        
     }
 
     /**
@@ -253,7 +258,9 @@ public class Game implements Runnable,Constants {
         ball = new Ball(getWidth()/2, getHeight()-150, BALL_DIMENSION, BALL_DIMENSION, this, 0, 0);
         paddle = new Paddle(getWidth()/2, getHeight() - 100, PADDLE_HEIGHT, PADDLE_WIDTH, this);
         display.getJframe().addKeyListener(keyManager);
-                
+
+        power = new PowerUp(0,0,0,0,this,0,0);
+        
         //add the bricks to the linked lists
         for (int i = 0; i <= 10; i++) {
             bricks.add(new Brick(BRICK_DIFFX*i+BRICK_STARTX1, BRICK_STARTY1, BRICK_HEIGHT, BRICK_WIDTH, this));
@@ -286,7 +293,6 @@ public class Game implements Runnable,Constants {
             setPaused(!isPaused());
             getKeyManager().setP(false);
         }
-        
         // starts the movement of the ball
         if(getKeyManager().isSPACE() == true && !isStart()){
            getKeyManager().setSPACE(false);
@@ -350,7 +356,34 @@ public class Game implements Runnable,Constants {
                     ball.setVelY(-ball.getVelY());
                 }
                 */
+            }
+            if(!power.isCreated())
+            {
+                if(bricksAmount  == bricks.size())
+                {
+                    power = new PowerUp((int) (Math.random() * (getWidth())),0,POWERUP1_WIDTH,POWERUP1_HEIGHT,this,3,1);
+                    power.setCreated(true);
+                }
 
+            }
+            
+            if(power.intersecta(paddle))
+            {
+                switch(power.getPower())
+                {
+                    case 1:
+                    paddle.setVelocity(paddle.getVelocity()+10);
+                    break;
+
+                    case 2:
+                    paddle.setLives(paddle.getLives()+1);
+                    break;
+
+                    case 3:
+                    paddle.setVelocity(paddle.getVelocity()-5);
+                    break;
+                }
+                power.reset();
             }
             // checks if the ball reaches the bottom and restarts
             if(ball.isBottom())
@@ -371,18 +404,20 @@ public class Game implements Runnable,Constants {
             
             //checkes the collision of every brick
             for (int i = 0; i < bricks.size(); i++) {
+                
                 if (ball.intersecta(bricks.get(i))) {
                     //sets the velocity to the other side
                     ball.setVelY(-ball.getVelY());
                     //takes 1 live from the brick and changes the skin color
                     bricks.get(i).setLives(bricks.get(i).getLives() - 1);
                     paddle.setScore(paddle.getScore()+50);
-                    ball.setCollisions(ball.getCollisions()+1);
                 }
 
                 if(bricks.get(i).getLives() == 0) {
                     bricks.remove(bricks.get(i));
+                    
                 }
+                
                 else {
                     bricks.get(i).tick();
                 }
@@ -390,6 +425,7 @@ public class Game implements Runnable,Constants {
 
             ball.tick();
             paddle.tick();
+            power.tick();
         }
 
         if(isGameOver() && getKeyManager().isR() == true) {
@@ -416,9 +452,11 @@ public class Game implements Runnable,Constants {
             g.drawImage(Assets.background, 0, 0, getWidth(), getHeight(), null);
             
             g.setColor(Color.WHITE);
+            
             if(!isGameOver()) {
                 
                 paddle.render(g);
+                power.render(g);
                 ball.render(g);
                 for (int i = 0; i < bricks.size(); i++) {
                         bricks.get(i).render(g);
@@ -445,7 +483,8 @@ public class Game implements Runnable,Constants {
                 g.drawString("Game", getWidth()/2-100, getHeight()/2-100);
                 g.drawString("Over", getWidth()/2+50, getHeight()/2+50);
                 g.setFont(new Font("Serif", Font.BOLD, 60));
-                g.drawString("Final Score: " + paddle.getScore(), getWidth()/2-200, getHeight()/2+200);
+                g.drawString("Press R to Restart Game", getWidth()/2-200, getHeight()/2+200);
+                
             }
             bs.show();
             g.dispose();
@@ -521,7 +560,6 @@ public class Game implements Runnable,Constants {
         fileOut.println(paddle.getScore());
        
         fileOut.close();
-                
     }
     
     

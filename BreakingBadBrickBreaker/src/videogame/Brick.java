@@ -18,6 +18,7 @@ public class Brick extends Item {
     private int height;
     private Game game;
     private int lives;
+
     /**
      * Constructor to initialize an object of the type Brick with its attributes
      * @param x
@@ -33,7 +34,15 @@ public class Brick extends Item {
         this.game = game;      
         this.lives =  (int)(Math.random() * ((3 - 1) + 1)) + 1;
     }
-    // to 
+
+    /**
+     * Constructor to initialize an object of the type Brick with its attributes from the file
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     */
     public Brick(int x, int y, int width, int height, int lives, Game game) {
         super(x, y);
         this.width = width;

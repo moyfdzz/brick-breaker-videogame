@@ -21,8 +21,19 @@ public class PowerUp extends Item {
     private int maxVel;
     private boolean bottom;
     private int power;
+    private boolean created;
     
-    public PowerUp(int x, int y, int width, int height, Game game, int velX, int velY) {
+    /**
+     * Constructor to initialize an object of the type PowerUp with its attributes
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param game
+     * @param velY
+     * @param power
+     */
+    public PowerUp(int x, int y, int width, int height, Game game, int velY, int power) {
         super(x, y);
         this.width = width;
         this.height = height;
@@ -30,17 +41,20 @@ public class PowerUp extends Item {
         this.velY = velY;
         maxVel = 15;
         this.bottom = false;
-        this.power = 0;
+        this.power = power;
+        this.created = false;
     }
+
     /**
-     * to get the power of the ball
-     * @return 
+     * To get the power of the ball
+     * @return power
      */
     public int getPower() {
         return power;
     }
+
     /**
-     * to set the power of the ball
+     * To set the power of the ball
      * @param power 
      */
     public void setPower(int power) {
@@ -48,74 +62,99 @@ public class PowerUp extends Item {
     }
     
     /**
-     * to get the width of the ball
+     * To get the width of the ball
      * @return width
      */
     public int getWidth() {
         return width;
     }
+
     /**
-     * to set the width of the ball
+     * To set the width of the ball
      * @param width 
      */
     public void setWidth(int width) {
         this.width = width;
     }
+
     /**
-     * to get the height of the ball
+     * To get the height of the ball
      * @return height
      */
     public int getHeight() {
         return height;
     }
+
     /**
-     * to set the height of the ball
+     * To set the height of the ball
      * @param height 
      */
     public void setHeight(int height) {
         this.height = height;
     }
+
     /**
-     * to get the velY of the ball
+     * To get the velY of the ball
      * @return velY
      */
     public int getVelY() {
         return velY;
     }
+
     /**
-     * to set the velY of the ball
+     * To set the velY of the ball
      * @param velY 
      */
     public void setVelY(int velY) {
         this.velY = velY;
     }
+
     /**
-     * to get the maxVel of the ball
+     * To get the maxVel of the ball
      * @return 
      */
     public int getMaxVel() {
         return maxVel;
     }
+
     /**
-     * to set the maxVel of the ball
+     * To set the maxVel of the ball
      * @param maxVel 
      */
     public void setMaxVel(int maxVel) {
         this.maxVel = maxVel;
     }
+
     /**
-     * to get the status of bottom of the ball
+     * To get the status of bottom of the ball
      * @return 
      */
     public boolean isBottom() {
         return bottom;
     }
+
     /**
-     * to set the status of bottom of the ball
+     * To set the status of bottom of the ball
      * @param bottom 
      */
     public void setBottom(boolean bottom) {
         this.bottom = bottom;
+    }
+
+    /**
+     * To get the status of the power 
+     * @return created
+     */
+    public boolean isCreated() {
+        return created;
+    }
+
+    /**
+     * To set the status of the power up
+     * @param created
+     */
+    public void setCreated(boolean created) {
+        this.created = created;
     }
     
     /**
@@ -138,10 +177,6 @@ public class PowerUp extends Item {
     @Override
     public void tick() {
         
-        if (getY() <= 0) { // Top margin of window
-            setVelY(-getVelY());
-        } 
-        
         if (getY() + getHeight() >= game.getHeight()) {
             setBottom(true);
         } 
@@ -152,15 +187,29 @@ public class PowerUp extends Item {
         
         //sets the movement
         setY(getY() + getVelY());  
+
+        if(isBottom())
+        {
+            reset();
+        }
+        
     }
-    
+    public void reset(){
+        setBottom(false);
+        setX(0);
+        setY(0);
+        setPower(0);
+        setVelY(0);
+        setCreated(false);
+    }
     /**
      * renders the ball
      * @param g 
      */
     @Override
     public void render(Graphics g) {
-        switch(power)
+        
+        switch(getPower())
         {
             case 1: 
             g.drawImage(Assets.lightning, getX(), getY(), getWidth(), getHeight(), null);
@@ -172,8 +221,6 @@ public class PowerUp extends Item {
             g.drawImage(Assets.invisible, getX(), getY(), getWidth(), getHeight(), null);
                 break;
         }
+        
     }
-    
-    
-    
 }

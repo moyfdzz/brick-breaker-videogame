@@ -6,14 +6,18 @@ package videogame;
  * @author ErickFrank
  */
 public interface Constants {
-    
-    
     public static final int PADDLE_HEIGHT = 120;
     public static final int PADDLE_WIDTH = 65;
     public static final int BALL_DIMENSION = 25;
+    public static final int POWERUP1_HEIGHT = 60;
+    public static final int POWERUP1_WIDTH = 60;
+    public static final int POWERUP2_HEIGHT = 60;
+    public static final int POWERUP2_WIDTH = 40;
+    public static final int POWERUP3_HEIGHT = 40;
+    public static final int POWERUP3_WIDTH = 60;
     public static final int BRICK_HEIGHT = 70;
     public static final int BRICK_WIDTH = 25;
-    public static final int LIVES_HEIGHT = 40;
+    public static final int LIVES_HEIGHT = 25;
     public static final int LIVES_WIDTH = 25;
     public static final int LIVES_DIFFX = 40;
     public static final int LIVES_STARTY = 10;

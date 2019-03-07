@@ -57,11 +57,11 @@ public class Display {
     }
 
     /**
-     * initializes	the	values	for	the	application	game
+     * initializes the values for the application game
      *
-     * @param	title	to	display	the	title	of	the	window
-     * @param	width	to	set	the	width
-     * @param	height	to	set	the	height
+     * @param title	to display the title of	the	window
+     * @param width	to set the width
+     * @param height to	set	the	height
      */
     public Display(String title, int width, int height) {
         this.title = title;
@@ -71,9 +71,9 @@ public class Display {
     }
 
     /**
-     * to	get	the	canvas	of	the	game
+     * To get the canvas of the game
      *
-     * @return	the	canvas
+     * @return canvas
      */
     public Canvas getCanvas() {
         return canvas;
